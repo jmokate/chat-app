@@ -1,22 +1,42 @@
-body {
+/* html {
   max-width: 100%;
   max-height: 100%;
   background: #444;
+} */
+@import url("https://fonts.googleapis.com/css?family=Cedarville+Cursive&display=swap");
+
+html,
+body {
+  height: 100%;
+  max-height: 100%;
+  overflow: auto;
+  background-image: linear-gradient(to bottom right, #3a6186, #89253e);
+  background-repeat: no-repeat;
+}
+
+.title {
+  /* background-image: linear-gradient(to bottom right, #3a6186, #89253e); */
+  height: 10em;
+}
+
+.title-text {
+  font-family: "Cedarville Cursive", cursive;
+  font-size: 5em;
+  color: hotpink !important;
+  padding-top: 0.3em;
 }
 
 .main-outline {
-  margin-top: 10em;
-  height: 39em;
-  border: 1px, solid, #444;
+  /* margin-top: 10em; */
+  height: 38em;
   border-radius: 5px;
-  background: #444;
+  /* background-image: linear-gradient(to bottom right, #3a6186, #89253e); */
 }
 
 .users-box {
   max-width: 100vw;
   margin: 1em 0 0 0;
   height: 30em;
-  background: #444;
   border: 1px solid whitesmoke;
   border-radius: 5px;
 }
@@ -24,15 +44,44 @@ body {
 .chat-box {
   margin: 1em 0 0 0;
   height: 30em;
-  background: #444;
   border: 1px solid whitesmoke;
   border-radius: 5px;
 }
 
 .labels {
-  color: whitesmoke;
+  color: hotpink !important;
 }
 
 .text-input {
   margin-top: 2em;
+  background-color: #bbb !important;
+  color: #222 !important;
+}
+
+.btn {
+  margin-top: 2em;
+  background-color: #3a6186 !important;
+}
+
+.you {
+  color: whitesmoke;
+  font-weight: 700;
+}
+
+.users-online {
+  color: black;
+  font-weight: 700;
+}
+
+.users-offline {
+  color: #aaa;
+}
+
+.chat-font {
+  color: whitesmoke;
+}
+
+.messages {
+  position: absolute;
+  bottom: 0;
 }
