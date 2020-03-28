@@ -17,8 +17,9 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       displayMessage: false,
-      message: [
+      messages: [
         {
+          id: null,
           userName: "You",
           text: ""
         }
@@ -26,18 +27,49 @@ class Chat extends React.Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.state.messages);
+  }
+
   handleChange = event => {
-    this.setState({ message: { text: event.target.value } });
+    let text = event.target.value;
+    this.setState({ message: { text: text } });
   };
 
   handleSubmit = event => {
+    //set display to true
+    // set text
     event.preventDefault();
-    console.log("submitted");
-
-    this.setState({ displayMessage: true, message: { text: "" } });
+    let text = event.target.value;
+    let id = new Date().getTime();
+    this.setState(prevstate => ({
+      displayMessage: true,
+      message: { id: id, text: text }
+    }));
+    console.log(this.state.messages);
+    // this.setState({ message: { text: "" } });
   };
 
   render() {
+    let display = this.state.displayMessage;
+    let renderMessage;
+    const messages = this.state.messages;
+
+    if (display) {
+      renderMessage = Object.keys(messages).map(
+        message => (
+          (
+            <Message
+              key={message.id}
+              userName={message.userName}
+              text={message.text}
+            />
+          ),
+          console.log(messages)
+        )
+      );
+    }
+
     return (
       <div>
         <Container className='title'>
@@ -69,7 +101,7 @@ class Chat extends React.Component {
             <Col className='empty-col'></Col>
             <Col className='chat-box' xs={8} md={8} align='center'>
               <span className='labels'>Messages</span>
-              <Message />
+              {renderMessage}
             </Col>
           </Row>
           <Row noGutters>
@@ -81,7 +113,7 @@ class Chat extends React.Component {
                     as='textarea'
                     placeholder='you gonna let em talk to you like that?'
                     className='text-input'
-                    value={this.state.message.text}
+                    value={this.state.messages.text}
                     onChange={this.handleChange}
                   />
                   <InputGroup.Append>

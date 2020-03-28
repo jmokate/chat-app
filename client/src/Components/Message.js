@@ -8,16 +8,16 @@ function Message(props) {
       <tbody>
         <tr>
           <td>
-            <span className='you'>You: </span>
-            <span className='chat-font'>Sup</span>
+            <span className='you'>{props.userName}: </span>
+            <span className='chat-font'>{props.text}</span>
           </td>
         </tr>
-        <tr>
+        {/* <tr>
           <td>
             <span className='users-online'>Someone Else: </span>
             <span className='chat-font'>What'd you say to me?</span>
           </td>
-        </tr>
+        </tr> */}
       </tbody>
     </Table>
   );
