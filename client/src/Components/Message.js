@@ -12,12 +12,6 @@ function Message(props) {
             <span className='chat-font'>{props.text}</span>
           </td>
         </tr>
-        {/* <tr>
-          <td>
-            <span className='users-online'>Someone Else: </span>
-            <span className='chat-font'>What'd you say to me?</span>
-          </td>
-        </tr> */}
       </tbody>
     </Table>
   );

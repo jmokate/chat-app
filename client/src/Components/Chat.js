@@ -27,46 +27,35 @@ class Chat extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.state.messages);
-  }
-
   handleChange = event => {
-    let text = event.target.value;
-    this.setState({ message: { text: text } });
+    let display = event.target.value;
   };
 
-  handleSubmit = event => {
-    //set display to true
-    // set text
+  handleSubmit = async event => {
     event.preventDefault();
+
     let text = event.target.value;
+
     let id = new Date().getTime();
-    this.setState(prevstate => ({
+    await this.setState({
       displayMessage: true,
-      message: { id: id, text: text }
-    }));
+      messages: { id: id, userName: "You", text: text }
+    });
     console.log(this.state.messages);
-    // this.setState({ message: { text: "" } });
   };
 
   render() {
     let display = this.state.displayMessage;
     let renderMessage;
-    const messages = this.state.messages;
+    const messages = { ...this.state.messages };
 
     if (display) {
-      renderMessage = Object.keys(messages).map(
-        message => (
-          (
-            <Message
-              key={message.id}
-              userName={message.userName}
-              text={message.text}
-            />
-          ),
-          console.log(messages)
-        )
+      renderMessage = (
+        <Message
+          key={messages.id}
+          userName={messages.userName}
+          text={messages.text}
+        />
       );
     }
 
@@ -115,6 +104,7 @@ class Chat extends React.Component {
                     className='text-input'
                     value={this.state.messages.text}
                     onChange={this.handleChange}
+                    onSubmit={this.handleSubmit}
                   />
                   <InputGroup.Append>
                     <Button className='btn' onClick={this.handleSubmit}>

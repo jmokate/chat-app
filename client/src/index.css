@@ -61,6 +61,7 @@ body {
 .btn {
   margin-top: 2em;
   background-color: #3a6186 !important;
+  border: none !important;
 }
 
 .you {
