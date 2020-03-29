@@ -28,13 +28,13 @@ class Chat extends React.Component {
   }
 
   handleChange = event => {
-    let display = event.target.value;
+    this.setState({ messages: { text: event.target.value } });
   };
 
   handleSubmit = async event => {
     event.preventDefault();
 
-    let text = event.target.value;
+    let text = this.state.messages.text;
 
     let id = new Date().getTime();
     await this.setState({
