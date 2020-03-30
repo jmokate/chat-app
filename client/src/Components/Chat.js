@@ -17,46 +17,71 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       displayMessage: false,
-      messages: [
-        {
-          id: null,
-          userName: "You",
-          text: ""
-        }
-      ]
+      id: null,
+      userName: "You",
+      text: "",
+      messages: []
     };
   }
 
   handleChange = event => {
-    this.setState({ messages: { text: event.target.value } });
+    this.setState({ text: event.target.value });
   };
 
   handleSubmit = async event => {
-    event.preventDefault();
-
-    let text = this.state.messages.text;
+    if (!this.state.text) {
+      //event.preventDefault();
+      return null;
+    }
+    if (this.state.text.trim() == "") {
+      return null;
+    }
+    let text = this.state.text;
 
     let id = new Date().getTime();
+    let userName = this.state.userName;
+    let newMessage = {
+      id: id,
+      userName: userName,
+      text: text
+    };
     await this.setState({
       displayMessage: true,
-      messages: { id: id, userName: "You", text: text }
+      messages: [...this.state.messages, newMessage]
     });
+
     console.log(this.state.messages);
+    this.setState({ text: "" });
+  };
+
+  handleKeyPress = event => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      if (!this.state.text) {
+        event.preventDefault();
+      } else if (this.state.text) {
+        this.handleSubmit();
+        event.preventDefault();
+      }
+      if (event.shiftKey && event.key === 13) {
+        event.preventDefault();
+        this.setState(prevState => ({ text: prevState.text + "\n" }));
+      }
+    }
   };
 
   render() {
     let display = this.state.displayMessage;
     let renderMessage;
-    const messages = { ...this.state.messages };
+    const messages = this.state.messages;
 
     if (display) {
-      renderMessage = (
+      renderMessage = messages.map(messages => (
         <Message
           key={messages.id}
           userName={messages.userName}
           text={messages.text}
         />
-      );
+      ));
     }
 
     return (
@@ -90,6 +115,7 @@ class Chat extends React.Component {
             <Col className='empty-col'></Col>
             <Col className='chat-box' xs={8} md={8} align='center'>
               <span className='labels'>Messages</span>
+
               {renderMessage}
             </Col>
           </Row>
@@ -102,9 +128,9 @@ class Chat extends React.Component {
                     as='textarea'
                     placeholder='you gonna let em talk to you like that?'
                     className='text-input'
-                    value={this.state.messages.text}
+                    value={this.state.text}
                     onChange={this.handleChange}
-                    onSubmit={this.handleSubmit}
+                    onKeyPress={this.handleKeyPress}
                   />
                   <InputGroup.Append>
                     <Button className='btn' onClick={this.handleSubmit}>
