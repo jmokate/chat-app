@@ -23,7 +23,7 @@ body {
   font-family: "Cedarville Cursive", cursive;
   font-size: 5em;
   color: hotpink !important;
-  padding-top: 0.3em;
+  padding-top: 0.45em;
 }
 
 .main-outline {
@@ -95,11 +95,8 @@ body {
 .messagesContainer {
   bottom: 0;
   overflow: auto;
-
-  display: flex;
 }
 
 .messages {
   text-align: left;
-  flex-flow: column-reverse;
 }
