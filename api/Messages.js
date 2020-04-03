@@ -1,6 +1,6 @@
 messages = [
-  { user: "You", message: "hi" },
-  { user: "Them", message: "yo what up" }
+  { id: 0, user: "You", message: "hi" },
+  { id: 1, user: "Them", message: "yo what up" }
 ];
 
 module.exports = messages;
