@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/jmokate/chat-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.0.0"
   }
 }
