@@ -41,12 +41,12 @@ const queryUsers = async () => {
 //create a user in db
 const createUser = async username => {
   try {
-    // await client.query("BEGIN");
-    // await client.query("INSERT INTO users(username) VALUES($1) RETURNING id", [
-    //   username
-    // ]);
-    // console.log(`new row inserted with value of ${username}`);
-    // await client.query("COMMIT");
+    await client.query("BEGIN");
+    await client.query("INSERT INTO users(username) VALUES($1) RETURNING id", [
+      username
+    ]);
+    console.log(`new row inserted with value of ${username}`);
+    await client.query("COMMIT");
   } catch (err) {
     console.log(`there was a problem posting a user ${err}`);
     await client.query("ROLLBACK");
