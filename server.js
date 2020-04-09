@@ -3,9 +3,9 @@ const app = express();
 const path = require("path");
 const messages = require("./api/Messages");
 const port = process.env.PORT || 5000;
-const db = require("./db");
+const dataAccess = require("./data_access");
 
-const database = db.connectToDb();
+const AccessDatabase = dataAccess.connectToDb();
 
 require("dotenv").config();
 
