@@ -4,3 +4,4 @@ node_modules
 postexample.js
 pool.js
 .vscode
+.history 

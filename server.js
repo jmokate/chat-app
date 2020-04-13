@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const messages = require("./api/Messages");
+const exampleMessages = require("./api/Messages");
 const port = process.env.PORT || 5000;
 const dataAccess = require("./data_access");
 
@@ -16,11 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // GET messages
-app.get("/api/messages", (req, res) => {
+app.get("/api/messages", async (req, res) => {
+  const messages = await dataAccess.queryAllMessages();
   res.send(messages);
 });
 
-//POST messages
+//POST messagesy
 app.post("/api/messages", (req, res) => {
   const newMember = {
     id: req.body.id,
@@ -28,14 +29,17 @@ app.post("/api/messages", (req, res) => {
     message: req.body.message
   };
   messages.push(newMember);
-  res.send(messages);
+  res.send(exampleMessages);
 });
 
 //GET all users
-app.get("/api/users", (req, res) => {
-  let users = messages.map(message => {
-    return message.user;
-  });
+app.get("/api/users", async (req, res) => {
+  const users = await dataAccess.queryUsers();
+
+  // let users = messages.map(message => {
+  //   return message.user;
+  // });
+
   res.send(users);
 });
 
@@ -46,14 +50,15 @@ app.post("/api/users", (req, res) => {
     user: req.body.user
   };
   messages.push(newUser);
-  res.send(messages);
+  res.send(exampleMessages);
 });
 
 //GET single user
-app.get("/api/users/:id", (req, res) => {
-  const userMatch = messages.filter(
-    message => message.id === parseInt(req.params.id)
-  );
+app.get("/api/users/:id", async (req, res) => {
+  const userMatch = await dataAccess.queryUserById();
+  // const userMatch = exampleMessages.filter(
+  //   message => message.id === parseInt(req.params.id)
+  // );
   res.send(userMatch);
 });
 
