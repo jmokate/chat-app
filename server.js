@@ -9,7 +9,7 @@ const AccessDatabase = dataAccess.connectToDb();
 
 require("dotenv").config();
 
-app.use(express.static(path.join(__dirname, "client/public")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 //body parser middleware
 app.use(express.json());
@@ -64,7 +64,7 @@ app.get("/api/users/:id", async (req, res) => {
 
 app.get("/*", (req, res) => {
   res.send("hiya");
-  res.sendFile(path.join(__dirname, "client", "public", "index.html"));
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => console.log(`app listening at ${port}`));
