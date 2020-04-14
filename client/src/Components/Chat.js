@@ -28,9 +28,9 @@ class Chat extends React.Component {
   }
 
   async componentDidMount() {
-    const url = `/api/users`;
+    const usersUrl = `/api/users`;
     await axios
-      .get(url)
+      .get(usersUrl)
       .then(response => {
         const users = response.data;
 
@@ -38,6 +38,18 @@ class Chat extends React.Component {
           users: users
         });
         console.log(users);
+      })
+      .catch(err => console.log(err));
+
+    const messagesUrl = `/api/messages`;
+    await axios
+      .get(messagesUrl)
+      .then(response => {
+        const messages = response.data;
+        this.setState({
+          messages: messages
+        });
+        console.log(messages);
       })
       .catch(err => console.log(err));
   }
@@ -96,7 +108,7 @@ class Chat extends React.Component {
       renderMessage = messages.map(messages => (
         <Message
           key={messages.id}
-          userName={messages.userName}
+          userName={messages.user_id}
           text={messages.text}
         />
       ));
