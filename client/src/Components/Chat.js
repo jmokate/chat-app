@@ -1,5 +1,6 @@
 import React from "react";
 import Message from "./Message";
+import Users from "./Users";
 import {
   Container,
   Col,
@@ -99,17 +100,7 @@ class Chat extends React.Component {
               <span className='labels'>Users</span>
               {/* USERS IN CHAT */}
               <Table size='sm' borderless>
-                <tbody>
-                  <tr>
-                    <td className='you'>You</td>
-                  </tr>
-                  <tr>
-                    <td className='users-online'>Someone Else</td>
-                  </tr>
-                  <tr>
-                    <td className='users-offline'>User offline</td>
-                  </tr>
-                </tbody>
+                <Users />
               </Table>
             </Col>
             <Col className='empty-col'></Col>

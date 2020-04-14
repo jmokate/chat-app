@@ -5,7 +5,7 @@ const exampleMessages = require("./api/Messages");
 const port = process.env.PORT || 5000;
 const dataAccess = require("./data_access");
 
-const AccessDatabase = dataAccess.connectToDb();
+dataAccess.connectToDb();
 
 require("dotenv").config();
 
@@ -22,14 +22,14 @@ app.get("/api/messages", async (req, res) => {
 });
 
 //POST messagesy
-app.post("/api/messages", (req, res) => {
-  const newMember = {
-    id: req.body.id,
-    user: req.body.user,
-    message: req.body.message
-  };
-  messages.push(newMember);
-  res.send(exampleMessages);
+app.post("/api/messages", async (req, res) => {
+  // const newMember = {
+  //   id: req.body.id,
+  //   user: req.body.user,
+  //   message: req.body.message
+  // };
+  // messages.push(newMember);
+  // res.send(exampleMessages);
 });
 
 //GET all users
@@ -44,13 +44,13 @@ app.get("/api/users", async (req, res) => {
 });
 
 //POST a user (CREATE user)
-app.post("/api/users", (req, res) => {
-  const newUser = {
-    id: req.body.id,
-    user: req.body.user
-  };
-  messages.push(newUser);
-  res.send(exampleMessages);
+app.post("/api/users", async (req, res) => {
+  // const newUser = {
+  //   id: req.body.id,
+  //   user: req.body.user
+  // };
+  // messages.push(newUser);
+  // res.send(exampleMessages);
 });
 
 //GET single user
@@ -62,8 +62,8 @@ app.get("/api/users/:id", async (req, res) => {
   res.send(userMatch);
 });
 
-app.get("/*", (req, res) => {
-  res.send("hiya");
+app.get("/*", async (req, res) => {
+  //res.send("hiya");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
