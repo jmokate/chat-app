@@ -12,6 +12,7 @@ import {
   Table
 } from "react-bootstrap";
 import "../index.css";
+import axios from "axios";
 
 class Chat extends React.Component {
   constructor(props) {
@@ -21,8 +22,24 @@ class Chat extends React.Component {
       id: null,
       userName: "You",
       text: "",
-      messages: []
+      messages: [],
+      users: []
     };
+  }
+
+  async componentDidMount() {
+    const url = `/api/users`;
+    await axios
+      .get(url)
+      .then(response => {
+        const users = response.data;
+
+        this.setState({
+          users: users
+        });
+        console.log(users);
+      })
+      .catch(err => console.log(err));
   }
 
   handleChange = event => {
@@ -84,6 +101,11 @@ class Chat extends React.Component {
         />
       ));
     }
+    let renderUsers;
+    const users = this.state.users;
+    renderUsers = users.map(user => (
+      <Users key={user.id} userName={user.username} />
+    ));
 
     return (
       <div>
@@ -100,7 +122,7 @@ class Chat extends React.Component {
               <span className='labels'>Users</span>
               {/* USERS IN CHAT */}
               <Table size='sm' borderless>
-                <Users />
+                <tbody>{renderUsers}</tbody>
               </Table>
             </Col>
             <Col className='empty-col'></Col>
