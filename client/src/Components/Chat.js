@@ -75,6 +75,9 @@ class Chat extends React.Component {
       userName: userName,
       text: text
     };
+
+    this.submitMessageToDataBase(newMessage);
+
     await this.setState({
       displayMessage: true,
       messages: [...this.state.messages, newMessage]
@@ -82,6 +85,18 @@ class Chat extends React.Component {
 
     console.log(this.state.messages);
     this.setState({ text: "" });
+  };
+
+  submitMessageToDataBase = async newMessage => {
+    console.log(newMessage);
+    const text = newMessage.text;
+    console.log(text);
+    const url = `/api/messages/q=${text}`;
+
+    axios
+      .post(url)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
   };
 
   handleKeyPress = event => {
@@ -108,7 +123,7 @@ class Chat extends React.Component {
       renderMessage = messages.map(messages => (
         <Message
           key={messages.id}
-          userName={messages.user_id}
+          userName={messages.username}
           text={messages.text}
         />
       ));

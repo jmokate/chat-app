@@ -54,7 +54,9 @@ createUser = async username => {
 queryAllMessages = async () => {
   try {
     console.log("connected to messages in database");
-    const results = await client.query("SELECT * FROM messages");
+    const results = await client.query(
+      "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
+    );
     console.table(results.rows);
     return results.rows;
   } catch (err) {
