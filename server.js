@@ -23,11 +23,14 @@ app.get("/api/messages", async (req, res) => {
 
 //POST messagesy
 app.post("/api/messages", async (req, res) => {
-  // const newMember = {
-  //   id: req.body.id,
-  //   user: req.body.user,
-  //   message: req.body.message
+  // const newMessage = {
+  //   username: req.body.userName,
+  //   text: req.body.text
   // };
+  const newMessage = req.body.text;
+
+  console.log(newMessage);
+  dataAccess.createMessage(5, newMessage);
   // messages.push(newMember);
   // res.send(exampleMessages);
 });

@@ -19,7 +19,7 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       displayMessage: false,
-      id: null,
+
       userName: "You",
       text: "",
       messages: [],
@@ -68,10 +68,8 @@ class Chat extends React.Component {
     }
     let text = this.state.text;
 
-    let id = new Date().getTime();
     let userName = this.state.userName;
     let newMessage = {
-      id: id,
       userName: userName,
       text: text
     };
@@ -91,10 +89,10 @@ class Chat extends React.Component {
     console.log(newMessage);
     const text = newMessage.text;
     console.log(text);
-    const url = `/api/messages/q=${text}`;
+    const url = `/api/messages`;
 
     axios
-      .post(url)
+      .post(url, newMessage)
       .then(response => console.log(response))
       .catch(err => console.log(err));
   };
@@ -115,19 +113,19 @@ class Chat extends React.Component {
   };
 
   render() {
-    let display = this.state.displayMessage;
+    //let display = this.state.displayMessage;
     let renderMessage;
     const messages = this.state.messages;
 
-    if (display) {
-      renderMessage = messages.map(messages => (
-        <Message
-          key={messages.id}
-          userName={messages.username}
-          text={messages.text}
-        />
-      ));
-    }
+    //if (display) {
+    renderMessage = messages.map(messages => (
+      <Message
+        key={messages.id}
+        userName={messages.username}
+        text={messages.text}
+      />
+    ));
+    //}
     let renderUsers;
     const users = this.state.users;
     renderUsers = users.map(user => (

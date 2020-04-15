@@ -98,5 +98,7 @@ module.exports = {
   connectToDb,
   queryUsers,
   queryAllMessages,
-  queryUserById
+  queryUserById,
+  createMessage,
+  createUser
 };
