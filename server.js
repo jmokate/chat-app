@@ -48,6 +48,8 @@ app.get("/api/users", async (req, res) => {
 
 //POST a user (CREATE user)
 app.post("/api/users", async (req, res) => {
+  const newUser = req.body;
+  console.log(newUser);
   // const newUser = {
   //   id: req.body.id,
   //   user: req.body.user

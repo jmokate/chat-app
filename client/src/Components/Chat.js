@@ -20,7 +20,7 @@ class Chat extends React.Component {
     this.state = {
       displayMessage: false,
 
-      userName: "You",
+      userName: "",
       text: "",
       messages: [],
       users: []
@@ -28,6 +28,26 @@ class Chat extends React.Component {
   }
 
   async componentDidMount() {
+    this.signInUser();
+    this.getAllUsers();
+    this.getAllMessages();
+  }
+
+  signInUser = async () => {
+    const name = prompt("Enter A User Name");
+
+    if (!name || name.trim() == "") {
+      this.signInUser();
+    }
+
+    sessionStorage.setItem("name", name);
+    this.setState({
+      userName: name
+    });
+    console.log(this.state.userName);
+  };
+
+  getAllUsers = async () => {
     const usersUrl = `/api/users`;
     await axios
       .get(usersUrl)
@@ -40,7 +60,9 @@ class Chat extends React.Component {
         console.log(users);
       })
       .catch(err => console.log(err));
+  };
 
+  getAllMessages = async () => {
     const messagesUrl = `/api/messages`;
     await axios
       .get(messagesUrl)
@@ -52,7 +74,7 @@ class Chat extends React.Component {
         console.log(messages);
       })
       .catch(err => console.log(err));
-  }
+  };
 
   handleChange = event => {
     this.setState({ text: event.target.value });
@@ -85,13 +107,22 @@ class Chat extends React.Component {
     this.setState({ text: "" });
   };
 
+  submitNewUserToDataBase = async newUser => {
+    //
+    const url = "/api/users";
+    await axios
+      .post(url, newUser)
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
+
   submitMessageToDataBase = async newMessage => {
     console.log(newMessage);
     const text = newMessage.text;
     console.log(text);
-    const url = `/api/messages`;
+    const url = "/api/messages";
 
-    axios
+    await axios
       .post(url, newMessage)
       .then(response => console.log(response))
       .catch(err => console.log(err));
@@ -125,6 +156,7 @@ class Chat extends React.Component {
         text={messages.text}
       />
     ));
+
     //}
     let renderUsers;
     const users = this.state.users;
