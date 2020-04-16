@@ -28,7 +28,10 @@ class Chat extends React.Component {
   }
 
   async componentDidMount() {
-    this.signInUser();
+    if (!sessionStorage.getItem("name")) {
+      this.signInUser();
+    }
+
     this.getAllUsers();
     this.getAllMessages();
   }
@@ -44,7 +47,12 @@ class Chat extends React.Component {
     this.setState({
       userName: name
     });
-    console.log(this.state.userName);
+    const newUser = {
+      id: null,
+      userName: name
+    };
+    console.log(newUser);
+    this.submitNewUserToDataBase(newUser);
   };
 
   getAllUsers = async () => {
@@ -108,8 +116,8 @@ class Chat extends React.Component {
   };
 
   submitNewUserToDataBase = async newUser => {
-    //
     const url = "/api/users";
+
     await axios
       .post(url, newUser)
       .then(response => console.log(response))
