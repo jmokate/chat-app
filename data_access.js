@@ -42,7 +42,10 @@ createUser = async username => {
     ]);
     console.log(`new row inserted with value of ${username}`);
     await client.query("COMMIT");
-    return true;
+    const results = await client.query(
+      `SELECT * FROM users WHERE username = ${username}`
+    );
+    return console.table(results.rows);
   } catch (err) {
     console.log(`there was a problem posting a user ${err}`);
     await client.query("ROLLBACK");

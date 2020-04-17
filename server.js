@@ -46,11 +46,12 @@ app.get("/api/users", async (req, res) => {
   res.send(users);
 });
 
-//POST a user (CREATE user)
+//CREATE a user (CREATE user)
 app.post("/api/users", async (req, res) => {
   const newUser = req.body.userName;
   console.log(newUser);
-  dataAccess.createUser(newUser);
+  const userInfo = dataAccess.createUser(newUser);
+  console.log(userInfo);
   // const newUser = {
   //   id: req.body.id,
   //   user: req.body.user
