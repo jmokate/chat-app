@@ -48,16 +48,18 @@ app.get("/api/users", async (req, res) => {
 
 //CREATE a user (CREATE user)
 app.post("/api/users", async (req, res) => {
-  const newUser = req.body.userName;
-  console.log(newUser);
-  const userInfo = dataAccess.createUser(newUser);
-  console.log(userInfo);
+  const newUser = req.body.newUser;
+  //console.log(newUser);
+  const newUserId = await dataAccess.createUser(newUser);
+  console.log(newUserId);
   // const newUser = {
   //   id: req.body.id,
   //   user: req.body.user
   // };
   // messages.push(newUser);
   // res.send(exampleMessages);
+
+  res.status(201).send({ newUserId });
 });
 
 //GET single user

@@ -19,40 +19,43 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       displayMessage: false,
-
-      userName: "",
       text: "",
       messages: [],
-      users: []
+      users: [],
+      currentUser: {
+        id: null,
+        userName: ""
+      }
     };
   }
 
   async componentDidMount() {
-    if (!sessionStorage.getItem("name")) {
+    if (!sessionStorage.getItem("user")) {
       this.signInUser();
     }
 
     this.getAllUsers();
     this.getAllMessages();
+    console.log(this.state.currentUser);
   }
 
-  signInUser = async () => {
+  signInUser = () => {
     const name = prompt("Enter A User Name");
 
     if (!name || name.trim() == "") {
       this.signInUser();
     }
 
-    sessionStorage.setItem("name", name);
-    this.setState({
-      userName: name
-    });
-    const newUser = {
-      id: null,
-      userName: name
-    };
-    console.log(newUser);
-    this.submitNewUserToDataBase(newUser);
+    // sessionStorage.setItem("name", name);
+    // this.setState({
+    //   userName: name
+    // });
+    // const newUser = {
+    //   id: null,
+    //   userName: name
+    // };
+    // console.log(newUser);
+    this.submitNewUserToDataBase(name);
   };
 
   getAllUsers = async () => {
@@ -115,12 +118,30 @@ class Chat extends React.Component {
     this.setState({ text: "" });
   };
 
-  submitNewUserToDataBase = async newUser => {
+  submitNewUserToDataBase = async newUserName => {
     const url = "/api/users";
 
+    console.log(newUserName);
+    const nameObject = { newUser: newUserName };
+    console.log(nameObject);
+
     await axios
-      .post(url, newUser)
-      .then(response => console.log(response))
+      .post(url, nameObject)
+      .then(response => {
+        if (response.status == 201) {
+          console.log(response);
+
+          const newUser = {
+            id: response.data.newUserId,
+            userName: newUserName
+          };
+
+          sessionStorage.setItem("user", JSON.stringify(newUser));
+          this.setState({
+            currentUser: { ...this.state.currentUser, newUser }
+          });
+        } else throw error;
+      })
       .catch(error => console.log(error));
   };
 
