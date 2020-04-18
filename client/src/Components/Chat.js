@@ -22,10 +22,7 @@ class Chat extends React.Component {
       text: "",
       messages: [],
       users: [],
-      currentUser: {
-        id: null,
-        userName: ""
-      }
+      currentUser: {}
     };
   }
 
@@ -36,7 +33,6 @@ class Chat extends React.Component {
 
     this.getAllUsers();
     this.getAllMessages();
-    console.log(this.state.currentUser);
   }
 
   signInUser = () => {
@@ -137,9 +133,12 @@ class Chat extends React.Component {
           };
 
           sessionStorage.setItem("user", JSON.stringify(newUser));
-          this.setState({
-            currentUser: { ...this.state.currentUser, newUser }
-          });
+          this.setState(
+            {
+              currentUser: { ...this.state.currentUser, newUser }
+            },
+            () => console.log(this.state.currentUser)
+          );
         } else throw error;
       })
       .catch(error => console.log(error));
