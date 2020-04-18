@@ -30,6 +30,18 @@ class Chat extends React.Component {
     if (!sessionStorage.getItem("user")) {
       this.signInUser();
     }
+    const userStorage = JSON.parse(sessionStorage.getItem("user"));
+
+    //console.log(userStorage);
+
+    this.setState(
+      prevState => (
+        {
+          currentUser: { ...prevState.currentUser, userStorage }
+        },
+        () => console.log(this.state.currentUser)
+      )
+    );
 
     this.getAllUsers();
     this.getAllMessages();
@@ -97,7 +109,7 @@ class Chat extends React.Component {
     }
     let text = this.state.text;
 
-    let userName = this.state.userName;
+    let userName = this.state.currentUser.userName;
     let newMessage = {
       userName: userName,
       text: text
@@ -119,18 +131,17 @@ class Chat extends React.Component {
 
     console.log(newUserName);
     const nameObject = { newUser: newUserName };
-    console.log(nameObject);
 
     await axios
       .post(url, nameObject)
       .then(response => {
         if (response.status == 201) {
-          console.log(response);
-
           const newUser = {
             id: response.data.newUserId,
             userName: newUserName
           };
+
+          console.log(newUser);
 
           sessionStorage.setItem("user", JSON.stringify(newUser));
           this.setState(
