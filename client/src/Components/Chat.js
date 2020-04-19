@@ -32,15 +32,13 @@ class Chat extends React.Component {
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
 
-    //console.log(userStorage);
+    console.log(userStorage);
 
     this.setState(
-      prevState => (
-        {
-          currentUser: { ...prevState.currentUser, userStorage }
-        },
-        () => console.log(this.state.currentUser)
-      )
+      {
+        currentUser: userStorage
+      },
+      () => console.log(this.state.currentUser)
     );
 
     this.getAllUsers();
@@ -111,7 +109,7 @@ class Chat extends React.Component {
 
     let userName = this.state.currentUser.userName;
     let newMessage = {
-      userName: userName,
+      username: userName,
       text: text
     };
 
@@ -141,12 +139,10 @@ class Chat extends React.Component {
             userName: newUserName
           };
 
-          console.log(newUser);
-
           sessionStorage.setItem("user", JSON.stringify(newUser));
           this.setState(
             {
-              currentUser: { ...this.state.currentUser, newUser }
+              currentUser: newUser
             },
             () => console.log(this.state.currentUser)
           );
@@ -190,7 +186,7 @@ class Chat extends React.Component {
     //if (display) {
     renderMessage = messages.map(messages => (
       <Message
-        key={messages.id}
+        //key={messages.id}
         userName={messages.username}
         text={messages.text}
       />
@@ -224,8 +220,7 @@ class Chat extends React.Component {
             <Col className='empty-col'></Col>
             <Col className='chat-box' xs={8} md={8} align='center'>
               <span className='labels'>Messages</span>
-
-              {renderMessage}
+              <div className='messagesContainer'>{renderMessage}</div>
             </Col>
           </Row>
           <Row noGutters>
