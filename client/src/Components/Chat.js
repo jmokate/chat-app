@@ -114,7 +114,7 @@ class Chat extends React.Component {
       text: this.state.text
     };
 
-    // this.submitMessageToDataBase(newMessage);
+    this.submitMessageToDataBase(newMessage);
 
     this.setState(
       {
@@ -186,11 +186,11 @@ class Chat extends React.Component {
 
   render() {
     //let display = this.state.displayMessage;
-    let renderMessage;
+    //let renderMessage;
     const messages = this.state.messagesInDataBase;
     let sessionKey = JSON.parse(sessionStorage.getItem("user"));
-    console.log(sessionKey.id);
-    console.log(messages.id);
+    //console.log(sessionKey.id);
+    //console.log(messages.id);
     console.log(this.state.currentUser.id);
     let currentId = this.state.currentUser.id;
 
@@ -198,36 +198,15 @@ class Chat extends React.Component {
 
     // console.log(messageIdFinder);
 
-    if (currentId !== sessionKey.id) {
-      renderMessage = messages.map(messages => (
-        <Message
-          //key={messages.id}
-          userName={messages.username}
-          text={messages.text}
-        />
-      ));
-    } else if (currentId == sessionKey.id) {
-      renderMessage = messages.map(messages => (
-        <CurrentMessage
-          //key={messages.id}
-          userName={messages.username}
-          text={messages.text}
-        />
-      ));
-    }
+    //TEST MAPPING
+    let renderMessage = messages.map(message => {
+      return message.id == currentId ? (
+        <Message userName={message.username} text={message.text} />
+      ) : (
+        <CurrentMessage userName={message.username} text={message.text} />
+      );
+    });
 
-    //if (display) {
-
-    // let renderCurrentMessage;
-    // const currentMessages = this.state.currentMessages;
-    // renderCurrentMessage = currentMessages.map(currentMessage => {
-    //   <CurrentMessage
-    //     userName={currentMessage.username}
-    //     text={currentMessage.text}
-    //   />;
-    // });
-
-    //}
     let renderUsers;
     const users = this.state.users;
     renderUsers = users.map(user => (
