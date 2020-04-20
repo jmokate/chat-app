@@ -1,6 +1,7 @@
 import React from "react";
 import Message from "./Message";
 import Users from "./Users";
+import CurrentMessage from "./CurrentMessage";
 import {
   Container,
   Col,
@@ -20,9 +21,10 @@ class Chat extends React.Component {
     this.state = {
       displayMessage: false,
       text: "",
-      messages: [],
+      messagesInDataBase: [],
       users: [],
-      currentUser: {}
+      currentUser: {},
+      currentMessages: []
     };
   }
 
@@ -86,7 +88,7 @@ class Chat extends React.Component {
       .then(response => {
         const messages = response.data;
         this.setState({
-          messages: messages
+          messagesInDataBase: messages
         });
         console.log(messages);
       })
@@ -105,22 +107,26 @@ class Chat extends React.Component {
     if (this.state.text.trim() == "") {
       return null;
     }
-    let text = this.state.text;
 
-    let userName = this.state.currentUser.userName;
     let newMessage = {
-      username: userName,
-      text: text
+      id: this.state.currentUser.id,
+      username: this.state.currentUser.userName,
+      text: this.state.text
     };
 
-    this.submitMessageToDataBase(newMessage);
+    // this.submitMessageToDataBase(newMessage);
 
-    await this.setState({
-      displayMessage: true,
-      messages: [...this.state.messages, newMessage]
-    });
+    this.setState(
+      {
+        displayMessage: true,
+        messagesInDataBase: [...this.state.messagesInDataBase, newMessage]
+        // curentMessages: [...this.state.currentMessages, newMessage]
+      },
+      () => console.log(this.state.currentMessages)
+    );
 
-    console.log(this.state.messages);
+    console.log(this.state.messagesInDataBase);
+    //console.log(this.state.currentMessages);
     this.setState({ text: "" });
   };
 
@@ -181,16 +187,45 @@ class Chat extends React.Component {
   render() {
     //let display = this.state.displayMessage;
     let renderMessage;
-    const messages = this.state.messages;
+    const messages = this.state.messagesInDataBase;
+    let sessionKey = JSON.parse(sessionStorage.getItem("user"));
+    console.log(sessionKey.id);
+    console.log(messages.id);
+    console.log(this.state.currentUser.id);
+    let currentId = this.state.currentUser.id;
+
+    // let messageIdFinder = messages.find(message => message.id == currentId);
+
+    // console.log(messageIdFinder);
+
+    if (currentId !== sessionKey.id) {
+      renderMessage = messages.map(messages => (
+        <Message
+          //key={messages.id}
+          userName={messages.username}
+          text={messages.text}
+        />
+      ));
+    } else if (currentId == sessionKey.id) {
+      renderMessage = messages.map(messages => (
+        <CurrentMessage
+          //key={messages.id}
+          userName={messages.username}
+          text={messages.text}
+        />
+      ));
+    }
 
     //if (display) {
-    renderMessage = messages.map(messages => (
-      <Message
-        //key={messages.id}
-        userName={messages.username}
-        text={messages.text}
-      />
-    ));
+
+    // let renderCurrentMessage;
+    // const currentMessages = this.state.currentMessages;
+    // renderCurrentMessage = currentMessages.map(currentMessage => {
+    //   <CurrentMessage
+    //     userName={currentMessage.username}
+    //     text={currentMessage.text}
+    //   />;
+    // });
 
     //}
     let renderUsers;

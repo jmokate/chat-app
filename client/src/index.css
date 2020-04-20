@@ -96,6 +96,7 @@ body {
 .messagesContainer {
   bottom: 0;
   overflow: auto;
+  padding: 0 0 5px 5px;
 }
 
 .messages {
