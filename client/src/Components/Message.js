@@ -4,7 +4,7 @@ import "../index.css";
 function Message(props) {
   return (
     <div className='messages'>
-      <span className='users-online'>{props.userName}: </span>
+      <span className={props.className}>{props.userName}: </span>
       <span className='chat-font'>{props.text}</span>
       <br />
     </div>

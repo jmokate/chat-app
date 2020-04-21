@@ -1,7 +1,6 @@
 import React from "react";
 import Message from "./Message";
 import Users from "./Users";
-import CurrentMessage from "./CurrentMessage";
 import {
   Container,
   Col,
@@ -23,18 +22,17 @@ class Chat extends React.Component {
       text: "",
       messagesInDataBase: [],
       users: [],
-      currentUser: {},
-      currentMessages: []
+      currentUser: {}
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!sessionStorage.getItem("user")) {
       this.signInUser();
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
 
-    console.log(userStorage);
+    //console.log(userStorage);
 
     this.setState(
       {
@@ -45,6 +43,11 @@ class Chat extends React.Component {
 
     this.getAllUsers();
     this.getAllMessages();
+  }
+
+  componentDidUpdate() {
+    const scrollDiv = document.querySelector(".messagesContainer");
+    scrollDiv.scrollTop = scrollDiv.scrollHeight;
   }
 
   signInUser = () => {
@@ -120,7 +123,6 @@ class Chat extends React.Component {
       {
         displayMessage: true,
         messagesInDataBase: [...this.state.messagesInDataBase, newMessage]
-        // curentMessages: [...this.state.currentMessages, newMessage]
       },
       () => console.log(this.state.currentMessages)
     );
@@ -185,33 +187,47 @@ class Chat extends React.Component {
   };
 
   render() {
-    //let display = this.state.displayMessage;
-    //let renderMessage;
     const messages = this.state.messagesInDataBase;
-    let sessionKey = JSON.parse(sessionStorage.getItem("user"));
-    //console.log(sessionKey.id);
-    //console.log(messages.id);
-    console.log(this.state.currentUser.id);
-    let currentId = this.state.currentUser.id;
 
-    // let messageIdFinder = messages.find(message => message.id == currentId);
+    let currentId;
+    if (this.state.currentUser) {
+      currentId = this.state.currentUser.id;
+    }
 
-    // console.log(messageIdFinder);
-
-    //TEST MAPPING
     let renderMessage = messages.map(message => {
       return message.id == currentId ? (
-        <Message userName={message.username} text={message.text} />
+        <Message
+          userName={message.username}
+          text={message.text}
+          className={"you"}
+        />
       ) : (
-        <CurrentMessage userName={message.username} text={message.text} />
+        <Message
+          userName={message.username}
+          text={message.text}
+          className={"users-online"}
+        />
+      );
+    });
+    const users = this.state.users;
+
+    let renderUsers = users.map(user => {
+      return user.id == currentId ? (
+        <Users key={user.id} userName={user.username} className={"you"} />
+      ) : (
+        <Users
+          key={user.id}
+          userName={user.username}
+          className={"users-online"}
+        />
       );
     });
 
-    let renderUsers;
-    const users = this.state.users;
-    renderUsers = users.map(user => (
-      <Users key={user.id} userName={user.username} />
-    ));
+    // let renderUsers;
+
+    // renderUsers = users.map(user => (
+    //   <Users key={user.id} userName={user.username} />
+    // ));
 
     return (
       <div>
@@ -226,10 +242,15 @@ class Chat extends React.Component {
           <Row noGutters>
             <Col className='users-box' xs={3} md={3} align='center'>
               <span className='labels'>Users</span>
-              {/* USERS IN CHAT */}
-              <Table size='sm' borderless>
-                <tbody>{renderUsers}</tbody>
-              </Table>
+              <div className='usersContainer'>
+                {/* USERS IN CHAT */}
+
+                {renderUsers}
+
+                {/* <Table size='sm' borderless>
+                  <tbody>{renderUsers}</tbody>
+                </Table> */}
+              </div>
             </Col>
             <Col className='empty-col'></Col>
             <Col className='chat-box' xs={8} md={8} align='center'>

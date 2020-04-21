@@ -40,6 +40,14 @@ body {
   border: 1px solid whitesmoke;
   border-radius: 5px;
   overflow: auto;
+  position: relative;
+}
+
+.usersContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  padding-left: 10px;
 }
 
 .chat-box {
@@ -96,6 +104,7 @@ body {
 .messagesContainer {
   bottom: 0;
   overflow: auto;
+
   padding: 0 0 5px 5px;
 }
 

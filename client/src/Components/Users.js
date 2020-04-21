@@ -2,9 +2,10 @@ import React from "react";
 
 function Users(props) {
   return (
-    <tr>
-      <td className='you'>{props.userName}</td>
-    </tr>
+    <div>
+      <span className={props.className}>{props.userName} </span>
+      <br />
+    </div>
   );
 }
 
