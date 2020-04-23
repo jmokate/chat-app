@@ -125,4 +125,6 @@ body {
 
 .link {
   text-decoration: none !important;
+  display: inline !important;
+  margin: 0 !important;
 }

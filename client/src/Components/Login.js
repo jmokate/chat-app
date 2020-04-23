@@ -7,7 +7,7 @@ import {
   Form,
   FormControl
 } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Login(props) {
   return (
@@ -29,11 +29,11 @@ function Login(props) {
         <Button md='auto' className='btn-login' size='lg' block>
           Sign In
         </Button>
-        <NavLink to='/register' className='link'>
+        <Link to='/register' className='link'>
           <Button className='btn-register' size='lg' block>
             Register New Account
           </Button>
-        </NavLink>
+        </Link>
       </Form>
     </Container>
   );

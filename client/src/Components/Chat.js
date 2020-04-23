@@ -98,7 +98,7 @@ class Chat extends React.Component {
       .catch(err => console.log(err));
   };
 
-  handleChange = event => {
+  handleChange = async event => {
     this.setState({ text: event.target.value });
   };
 
