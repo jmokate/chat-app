@@ -111,3 +111,18 @@ body {
 .messages {
   text-align: left;
 }
+
+/* css for login */
+
+#login-container {
+  background: whitesmoke;
+  margin-top: 5em;
+  border-radius: 5px;
+  height: 28em;
+
+  width: 20em;
+}
+
+.link {
+  text-decoration: none !important;
+}

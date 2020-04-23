@@ -2,6 +2,7 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import Chat from "./Components/Chat";
 import Login from "./Components/Login";
+import Register from "./Components/Register";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -10,6 +11,7 @@ function App() {
     <div className='App'>
       <Switch>
         <Route path='/login' component={Login} />
+        <Route path='/register' component={Register} />
         <Route path='/' component={Chat} />
       </Switch>
     </div>

@@ -3,35 +3,37 @@ import {
   Container,
   Col,
   Row,
+  InputGroup,
   Button,
   Form,
-  FormControl
+  FormControl,
+  Table
 } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
-function Login(props) {
+function Register(props) {
   return (
     <Container fluid id='login-container' className='justify-content-center'>
       <Row className='justify-content-center'>
-        <h1 className='mt-4'>Sign In</h1>
+        <h1 className='mt-4'>Register</h1>
       </Row>
 
       <Form className=''>
         <Form.Group>
           <Form.Label>Username</Form.Label>
-          <Form.Control type='email' placeholder='enter your username' />
+          <Form.Control type='email' placeholder='create a username' />
         </Form.Group>
         <Form.Group>
           <Form.Label>Password</Form.Label>
-          <Form.Control type='password' placeholder='enter your password' />
+          <Form.Control type='password' placeholder='create a password' />
         </Form.Group>
 
         <Button md='auto' className='btn-login' size='lg' block>
-          Sign In
+          Register
         </Button>
-        <NavLink to='/register' className='link'>
+        <NavLink to='/login' className='link'>
           <Button className='btn-register' size='lg' block>
-            Register New Account
+            I Have an Account
           </Button>
         </NavLink>
       </Form>
@@ -39,4 +41,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default Register;
