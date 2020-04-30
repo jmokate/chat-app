@@ -15,7 +15,8 @@ import axios from "axios";
 class Register extends React.Component {
   state = {
     userName: "",
-    password: ""
+    password: "",
+    isRegistered: false
   };
 
   handleNameChange = e => {
@@ -38,6 +39,7 @@ class Register extends React.Component {
 
   handleSubmit = e => {
     const { userName, password } = this.state;
+
     if (
       !userName ||
       !password ||
@@ -49,15 +51,42 @@ class Register extends React.Component {
       );
     }
 
-    newUser = {
+    const newUser = {
       userName: userName,
       password: password
     };
+    console.log(newUser);
 
     this.registerUser(newUser);
   };
 
-  registerUser = async user => {};
+  registerUser = async user => {
+    const { history } = this.props;
+    const { isRegistered } = this.state;
+
+    console.log(user);
+
+    await axios
+      .post("/api/users", user)
+      .then(response => {
+        if (response.status == 201) {
+          console.log("yay user created");
+          this.setState({
+            isRegistered: true
+          });
+          history.push("/");
+        }
+      })
+      .catch(error => {
+        alert(error.response.data.message);
+        console.log(error.message);
+      });
+
+    // console.log(this.state.isRegistered);
+    //   if (isRegistered == true) {
+    //     history.push("/login");
+    //   }
+  };
 
   render() {
     return (

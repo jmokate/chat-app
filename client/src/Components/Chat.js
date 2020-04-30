@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import "../index.css";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 class Chat extends React.Component {
   constructor(props) {
@@ -22,17 +23,17 @@ class Chat extends React.Component {
       text: "",
       messagesInDataBase: [],
       users: [],
-      currentUser: {}
+      currentUser: {},
+      isLoggedIn: false
     };
   }
 
   componentDidMount() {
-    if (!sessionStorage.getItem("user")) {
+    const checkStorage = sessionStorage.getItem("user");
+    if (!checkStorage) {
       this.signInUser();
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
-
-    //console.log(userStorage);
 
     this.setState(
       {
@@ -156,7 +157,10 @@ class Chat extends React.Component {
           );
         } else throw error;
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        alert(error.response.data.message);
+        this.signInUser();
+      });
   };
 
   submitMessageToDataBase = async newMessage => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route, Redirect } from "react-router-dom";
 import Chat from "./Components/Chat";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -12,7 +12,7 @@ function App() {
       <Switch>
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
-        <Route path='/' component={Chat} />
+        <Route path='/' component={Chat}></Route>
       </Switch>
     </div>
   );
