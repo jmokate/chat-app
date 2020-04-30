@@ -19,6 +19,16 @@ class Register extends React.Component {
     isRegistered: false
   };
 
+  componentDidMount() {
+    const { history } = this.props;
+    const checkStorage = sessionStorage.getItem("user");
+    if (checkStorage) {
+      const LoggedInUser = JSON.parse(sessionStorage.getItem("user"));
+      alert("you are already logged in as " + LoggedInUser.userName);
+      history.push("/");
+    }
+  }
+
   handleNameChange = e => {
     this.setState(
       {
@@ -62,7 +72,7 @@ class Register extends React.Component {
 
   registerUser = async user => {
     const { history } = this.props;
-    const { isRegistered } = this.state;
+    const { isRegistered, userName } = this.state;
 
     console.log(user);
 
@@ -71,9 +81,17 @@ class Register extends React.Component {
       .then(response => {
         if (response.status == 201) {
           console.log("yay user created");
+
           this.setState({
             isRegistered: true
           });
+          const newUser = {
+            userName: userName,
+            id: response.data.newUserId
+          };
+          console.log(newUser);
+
+          sessionStorage.setItem("user", JSON.stringify(newUser));
           history.push("/");
         }
       })

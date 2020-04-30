@@ -29,9 +29,10 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
+    const { history } = this.props;
     const checkStorage = sessionStorage.getItem("user");
     if (!checkStorage) {
-      this.signInUser();
+      history.push("/register");
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
 
@@ -51,24 +52,24 @@ class Chat extends React.Component {
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
   }
 
-  signInUser = () => {
-    const name = prompt("Enter A User Name");
+  // signInUser = () => {
+  //   const name = prompt("Enter A User Name");
 
-    if (!name || name.trim() == "") {
-      this.signInUser();
-    }
+  //   if (!name || name.trim() == "") {
+  //     this.signInUser();
+  //   }
 
-    // sessionStorage.setItem("name", name);
-    // this.setState({
-    //   userName: name
-    // });
-    // const newUser = {
-    //   id: null,
-    //   userName: name
-    // };
-    // console.log(newUser);
-    this.submitNewUserToDataBase(name);
-  };
+  //   // sessionStorage.setItem("name", name);
+  //   // this.setState({
+  //   //   userName: name
+  //   // });
+  //   // const newUser = {
+  //   //   id: null,
+  //   //   userName: name
+  //   // };
+  //   // console.log(newUser);
+  //   this.submitNewUserToDataBase(name);
+  // };
 
   getAllUsers = async () => {
     const usersUrl = `/api/users`;
@@ -133,35 +134,35 @@ class Chat extends React.Component {
     this.setState({ text: "" });
   };
 
-  submitNewUserToDataBase = async newUserName => {
-    const url = "/api/users";
+  // submitNewUserToDataBase = async newUserName => {
+  //   const url = "/api/users";
 
-    console.log(newUserName);
-    const nameObject = { newUser: newUserName };
+  //   console.log(newUserName);
+  //   const nameObject = { newUser: newUserName };
 
-    await axios
-      .post(url, nameObject)
-      .then(response => {
-        if (response.status == 201) {
-          const newUser = {
-            id: response.data.newUserId,
-            userName: newUserName
-          };
+  //   await axios
+  //     .post(url, nameObject)
+  //     .then(response => {
+  //       if (response.status == 201) {
+  //         const newUser = {
+  //           id: response.data.newUserId,
+  //           userName: newUserName
+  //         };
 
-          sessionStorage.setItem("user", JSON.stringify(newUser));
-          this.setState(
-            {
-              currentUser: newUser
-            },
-            () => console.log(this.state.currentUser)
-          );
-        } else throw error;
-      })
-      .catch(error => {
-        alert(error.response.data.message);
-        this.signInUser();
-      });
-  };
+  //         sessionStorage.setItem("user", JSON.stringify(newUser));
+  //         this.setState(
+  //           {
+  //             currentUser: newUser
+  //           },
+  //           () => console.log(this.state.currentUser)
+  //         );
+  //       } else throw error;
+  //     })
+  //     .catch(error => {
+  //       alert(error.response.data.message);
+  //       this.signInUser();
+  //     });
+  // };
 
   submitMessageToDataBase = async newMessage => {
     console.log(newMessage);
