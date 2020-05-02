@@ -59,13 +59,21 @@ app.post("/api/users", async (req, res) => {
     : res.status(201).send({ newUserId });
 });
 
-//GET single user
-app.get("/api/users/:id", async (req, res) => {
-  const userMatch = await dataAccess.queryUserById();
+//LOGIN single user
+app.post("/api/login", async (req, res) => {
+  const loginName = req.body.userName;
+  console.log(loginName);
+  const userMatch = await dataAccess.queryUserById(loginName);
   // const userMatch = exampleMessages.filter(
   //   message => message.id === parseInt(req.params.id)
   // );
-  res.send(userMatch);
+  !userMatch
+    ? res.status(401).json({
+        message:
+          "sorry, this username does not exist. Please register an account"
+      })
+    : console.log(userMatch);
+  res.status(201).send({ userMatch });
 });
 
 app.get("/*", async (req, res) => {

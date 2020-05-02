@@ -67,14 +67,17 @@ queryAllMessages = async () => {
 };
 // get a message by id in db
 
-queryUserById = async id => {
+queryUserById = async name => {
   try {
+    console.log(name);
     console.log("getting a message by id in messages");
-    const results = await client.query(`SELECT * FROM users WHERE id = ${id}`);
-    console.table(results.rows);
-    return results.rows;
+    const results = await client.query(
+      `SELECT * FROM users WHERE username = '${name}'`
+    );
+    console.table(results.rows[0]);
+    return results.rows[0];
   } catch (err) {
-    console.log(`something is not right with the id ${id}`);
+    console.log(`something is not right with the id ${name}`);
     return [];
   }
 };
