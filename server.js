@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const exampleMessages = require("./api/Messages");
 const port = process.env.PORT || 5000;
 const dataAccess = require("./data_access");
 
@@ -50,9 +49,10 @@ app.get("/api/users", async (req, res) => {
 //CREATE a user (CREATE user)
 app.post("/api/users", async (req, res) => {
   const newUser = req.body.userName;
-  console.log(newUser);
-  const newUserId = await dataAccess.createUser(newUser);
-  console.log("node log" + newUserId);
+  const password = req.body.password;
+  console.log(newUser + " " + password);
+  const newUserId = await dataAccess.createUser(newUser, password);
+  console.log("node log " + newUserId);
 
   !newUserId
     ? res.status(401).json({ message: "This user already exists" })
@@ -62,15 +62,15 @@ app.post("/api/users", async (req, res) => {
 //LOGIN single user
 app.post("/api/login", async (req, res) => {
   const loginName = req.body.userName;
+  const password = req.body.password;
   console.log(loginName);
-  const userMatch = await dataAccess.queryUserById(loginName);
+  const userMatch = await dataAccess.loginUser(loginName, password);
   // const userMatch = exampleMessages.filter(
   //   message => message.id === parseInt(req.params.id)
   // );
   !userMatch
     ? res.status(401).json({
-        message:
-          "sorry, this username does not exist. Please register an account"
+        message: "sorry, incorrect username or password"
       })
     : console.log(userMatch);
   res.status(201).send({ userMatch });

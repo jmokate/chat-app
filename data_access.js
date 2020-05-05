@@ -1,6 +1,8 @@
 require("dotenv").config();
-
 const PASS = process.env.POSTGRES;
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 //connecting to database
 const { Client } = require("pg");
 const client = new Client({
@@ -34,16 +36,20 @@ queryUsers = async () => {
 };
 
 //create a user in db
-createUser = async username => {
+createUser = async (username, password) => {
   try {
+    const hash = await bcrypt.hashSync(password, saltRounds);
     await client.query("BEGIN");
     const results = await client.query(
-      "INSERT INTO users(username) VALUES($1) RETURNING id",
-      [username]
+      "INSERT INTO users(username, password) VALUES($1, $2) RETURNING id",
+      [username, hash]
     );
     console.log(`new row inserted with value of ${username}`);
     await client.query("COMMIT");
+    console.table(results.rows[0].id);
     return results.rows[0].id;
+
+    // Store hash in your password DB.
   } catch (err) {
     console.log(`there was a problem posting a user ${err}`);
     await client.query("ROLLBACK");
@@ -67,15 +73,20 @@ queryAllMessages = async () => {
 };
 // get a message by id in db
 
-queryUserById = async name => {
+loginUser = async (name, password) => {
   try {
     console.log(name);
     console.log("getting a message by id in messages");
     const results = await client.query(
       `SELECT * FROM users WHERE username = '${name}'`
     );
+    saltedPassword = results.rows[0].password;
+    const passwordMatch = await bcrypt.compare(password, saltedPassword);
     console.table(results.rows[0]);
-    return results.rows[0];
+    if (passwordMatch) {
+      return results.rows[0];
+    }
+    return false;
   } catch (err) {
     console.log(`something is not right with the id ${name}`);
     return [];
@@ -102,7 +113,7 @@ module.exports = {
   connectToDb,
   queryUsers,
   queryAllMessages,
-  queryUserById,
+  loginUser,
   createMessage,
   createUser
 };

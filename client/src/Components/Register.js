@@ -72,7 +72,7 @@ class Register extends React.Component {
 
   registerUser = async user => {
     const { history } = this.props;
-    const { isRegistered, userName } = this.state;
+    const { userName, password } = this.state;
 
     console.log(user);
 
