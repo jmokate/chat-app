@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import "../index.css";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { AiOutlineLogout } from "react-icons/ai";
 
 class Chat extends React.Component {
   constructor(props) {
@@ -23,8 +23,7 @@ class Chat extends React.Component {
       text: "",
       messagesInDataBase: [],
       users: [],
-      currentUser: {},
-      isLoggedIn: false
+      currentUser: {}
     };
   }
 
@@ -32,7 +31,7 @@ class Chat extends React.Component {
     const { history } = this.props;
     const checkStorage = sessionStorage.getItem("user");
     if (!checkStorage) {
-      history.push("/register");
+      history.push("/login");
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
 
@@ -51,25 +50,6 @@ class Chat extends React.Component {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
   }
-
-  // signInUser = () => {
-  //   const name = prompt("Enter A User Name");
-
-  //   if (!name || name.trim() == "") {
-  //     this.signInUser();
-  //   }
-
-  //   // sessionStorage.setItem("name", name);
-  //   // this.setState({
-  //   //   userName: name
-  //   // });
-  //   // const newUser = {
-  //   //   id: null,
-  //   //   userName: name
-  //   // };
-  //   // console.log(newUser);
-  //   this.submitNewUserToDataBase(name);
-  // };
 
   getAllUsers = async () => {
     const usersUrl = `/api/users`;
@@ -106,7 +86,6 @@ class Chat extends React.Component {
 
   handleSubmit = async event => {
     if (!this.state.text) {
-      //event.preventDefault();
       return null;
     }
     if (this.state.text.trim() == "") {
@@ -130,39 +109,9 @@ class Chat extends React.Component {
     );
 
     console.log(this.state.messagesInDataBase);
-    //console.log(this.state.currentMessages);
+
     this.setState({ text: "" });
   };
-
-  // submitNewUserToDataBase = async newUserName => {
-  //   const url = "/api/users";
-
-  //   console.log(newUserName);
-  //   const nameObject = { newUser: newUserName };
-
-  //   await axios
-  //     .post(url, nameObject)
-  //     .then(response => {
-  //       if (response.status == 201) {
-  //         const newUser = {
-  //           id: response.data.newUserId,
-  //           userName: newUserName
-  //         };
-
-  //         sessionStorage.setItem("user", JSON.stringify(newUser));
-  //         this.setState(
-  //           {
-  //             currentUser: newUser
-  //           },
-  //           () => console.log(this.state.currentUser)
-  //         );
-  //       } else throw error;
-  //     })
-  //     .catch(error => {
-  //       alert(error.response.data.message);
-  //       this.signInUser();
-  //     });
-  // };
 
   submitMessageToDataBase = async newMessage => {
     console.log(newMessage);
@@ -189,6 +138,12 @@ class Chat extends React.Component {
         this.setState(prevState => ({ text: prevState.text + "\n" }));
       }
     }
+  };
+
+  handleLogout = () => {
+    const { history } = this.props;
+    sessionStorage.removeItem("user");
+    history.push("/");
   };
 
   render() {
@@ -228,12 +183,6 @@ class Chat extends React.Component {
       );
     });
 
-    // let renderUsers;
-
-    // renderUsers = users.map(user => (
-    //   <Users key={user.id} userName={user.username} />
-    // ));
-
     return (
       <div>
         <Container className='title'>
@@ -264,7 +213,12 @@ class Chat extends React.Component {
             </Col>
           </Row>
           <Row noGutters>
-            <Col xs={4} md={4}></Col>
+            <Col xs={4} md={4}>
+              <Button onClick={this.handleLogout}>
+                <AiOutlineLogout />
+              </Button>
+              <p>Logout</p>
+            </Col>
             <Col xs={8} md={8}>
               <Form onSubmit={this.handleSubmit}>
                 <InputGroup>
