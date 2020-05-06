@@ -75,7 +75,6 @@ class Chat extends React.Component {
         this.setState({
           messagesInDataBase: messages
         });
-        console.log(messages);
       })
       .catch(err => console.log(err));
   };
@@ -200,10 +199,6 @@ class Chat extends React.Component {
                 {/* USERS IN CHAT */}
 
                 {renderUsers}
-
-                {/* <Table size='sm' borderless>
-                  <tbody>{renderUsers}</tbody>
-                </Table> */}
               </div>
             </Col>
             <Col className='empty-col'></Col>

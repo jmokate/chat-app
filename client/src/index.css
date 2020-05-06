@@ -30,6 +30,7 @@ body {
   /* margin-top: 10em; */
   height: 38em;
   border-radius: 5px;
+
   /* background-image: linear-gradient(to bottom right, #3a6186, #89253e); */
 }
 
@@ -39,7 +40,7 @@ body {
   height: 30em;
   border: 1px solid whitesmoke;
   border-radius: 5px;
-  overflow: auto;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -55,7 +56,7 @@ body {
   height: 30em;
   border: 1px solid whitesmoke;
   border-radius: 5px;
-  overflow: auto;
+  overflow-y: auto;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -99,16 +100,21 @@ body {
 .chat-font {
   color: whitesmoke;
   white-space: pre;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .messagesContainer {
+  max-width: 100%;
   bottom: 0;
-  overflow: auto;
-
+  overflow-y: auto;
+  display: inline-block;
+  word-break: break-all;
   padding: 0 0 5px 5px;
 }
 
 .messages {
+  max-width: 100%;
   text-align: left;
 }
 
@@ -119,7 +125,6 @@ body {
   margin-top: 5em;
   border-radius: 5px;
   height: 28em;
-
   width: 20em;
 }
 
