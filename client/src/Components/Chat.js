@@ -84,6 +84,8 @@ class Chat extends React.Component {
   };
 
   handleSubmit = async event => {
+    event.preventDefault();
+    console.log(event.target);
     if (!this.state.text) {
       return null;
     }
@@ -113,7 +115,6 @@ class Chat extends React.Component {
   };
 
   submitMessageToDataBase = async newMessage => {
-    console.log(newMessage);
     const text = newMessage.text;
     console.log(text);
     const url = "/api/messages";
@@ -142,7 +143,7 @@ class Chat extends React.Component {
   handleLogout = () => {
     const { history } = this.props;
     sessionStorage.removeItem("user");
-    history.push("/");
+    history.push("/login");
   };
 
   render() {
@@ -218,6 +219,7 @@ class Chat extends React.Component {
               <Form onSubmit={this.handleSubmit}>
                 <InputGroup>
                   <FormControl
+                    id='msgForm'
                     as='textarea'
                     placeholder='you gonna let em talk to you like that?'
                     className='text-input'

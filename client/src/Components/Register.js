@@ -23,9 +23,7 @@ class Register extends React.Component {
     const { history } = this.props;
     const checkStorage = sessionStorage.getItem("user");
     if (checkStorage) {
-      const LoggedInUser = JSON.parse(sessionStorage.getItem("user"));
-      alert("you are already logged in as " + LoggedInUser.userName);
-      history.push("/");
+      history.push("/loggedin");
     }
   }
 
