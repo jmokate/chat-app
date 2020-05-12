@@ -14,6 +14,7 @@ import {
 import "../index.css";
 import axios from "axios";
 import { AiOutlineLogout } from "react-icons/ai";
+import socketIoClient from "socket-io-client";
 
 class Chat extends React.Component {
   constructor(props) {
