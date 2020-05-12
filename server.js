@@ -3,10 +3,21 @@ const app = express();
 const path = require("path");
 const port = process.env.PORT || 5000;
 const dataAccess = require("./data_access");
+const http = require("http");
+const socketIo = require("socket.io");
+const server = http.createServer(app);
+const io = socketIo(server);
 
 dataAccess.connectToDb();
 
 require("dotenv").config();
+
+io.on("connection", socket => {
+  console.log("socketing");
+  socket.on("disconnect", () => {
+    console.log("disconnecetedddd soceteer");
+  });
+});
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
