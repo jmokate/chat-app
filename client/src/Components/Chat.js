@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Message from "./Message";
 import Users from "./Users";
 import {
@@ -14,7 +14,10 @@ import {
 import "../index.css";
 import axios from "axios";
 import { AiOutlineLogout } from "react-icons/ai";
-import socketIoClient from "socket-io-client";
+import io from "socket.io-client";
+
+const ENDPOINT = "localhost:5000";
+let socket;
 
 class Chat extends React.Component {
   constructor(props) {
@@ -50,6 +53,9 @@ class Chat extends React.Component {
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
+
+    socket = io(ENDPOINT);
+    console.log(socket);
   }
 
   getAllUsers = async () => {

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 5000;
+
 const dataAccess = require("./data_access");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -13,9 +14,9 @@ dataAccess.connectToDb();
 require("dotenv").config();
 
 io.on("connection", socket => {
-  console.log("socketing");
+  console.log("client is connected");
   socket.on("disconnect", () => {
-    console.log("disconnecetedddd soceteer");
+    console.log("client has disconnected");
   });
 });
 
@@ -92,4 +93,4 @@ app.get("/*", async (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
-app.listen(port, () => console.log(`app listening at ${port}`));
+server.listen(port, () => console.log(`app with sockets listening at ${port}`));
