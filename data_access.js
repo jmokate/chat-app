@@ -27,7 +27,7 @@ queryUsers = async () => {
   try {
     console.log("connected to users in database");
     const results = await client.query("SELECT * FROM users");
-    console.table(results.rows);
+    // console.table(results.rows);
     return results.rows;
   } catch (err) {
     console.log(`something is not right ${err}`);
@@ -64,7 +64,7 @@ queryAllMessages = async () => {
     const results = await client.query(
       "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
     );
-    console.table(results.rows);
+    // console.table(results.rows);
     return results.rows;
   } catch (err) {
     console.log(`something went wrong ${err}`);
@@ -82,7 +82,7 @@ loginUser = async (name, password) => {
     );
     saltedPassword = results.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, saltedPassword);
-    console.table(results.rows[0]);
+    // console.table(results.rows[0]);
     if (passwordMatch) {
       return results.rows[0];
     }
@@ -102,7 +102,7 @@ createMessage = async (userId, text) => {
       [userId, text]
     );
     await client.query("COMMIT");
-    console.log(`new message by ${userId} that says ${text}`);
+    // console.log(`new message by ${userId} that says ${text}`);
   } catch (err) {
     console.log(`there was an error with ${(userId, text)}`);
     await client.query("ROLLBACK");

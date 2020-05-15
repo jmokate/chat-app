@@ -15,6 +15,15 @@ require("dotenv").config();
 
 io.on("connection", socket => {
   console.log("client is connected");
+
+  socket.emit("new_message", "you made it to socketville!");
+
+  // // LISTEN FOR CHAT MESSAGE
+  // socket.on("chat_message", chatMessage => {
+  //   console.log("new chat message is: " + chatMessage.text);
+  //   io.emit("chat_message", chatMessage.text);
+  // });
+
   socket.on("disconnect", () => {
     console.log("client has disconnected");
   });
@@ -38,13 +47,26 @@ app.post("/api/messages", async (req, res) => {
   //   username: req.body.userName,
   //   text: req.body.text
   // };
-  console.log(req.body);
+  // console.log(req.body);
   const newMessageUserId = req.body.id;
   const newMessageText = req.body.text;
 
   dataAccess.createMessage(newMessageUserId, newMessageText);
   // messages.push(newMember);
   // res.send(exampleMessages);
+  io.on("connection", socket => {
+    console.log("a  socket connection in messages established");
+
+    socket.on("chat_message", newMessageText => {
+      console.log("new chat message is: ", newMessageText);
+      // io.emit("chat_message", newMessageText);
+    });
+    socket.emit("chat_message", newMessageText);
+
+    socket.on("disconnect", () => {
+      console.log("user disconnected from messages socket");
+    });
+  });
 });
 
 //GET all users

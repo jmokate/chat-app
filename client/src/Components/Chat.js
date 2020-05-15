@@ -16,7 +16,6 @@ import axios from "axios";
 import { AiOutlineLogout } from "react-icons/ai";
 import io from "socket.io-client";
 
-const ENDPOINT = "localhost:5000";
 let socket;
 
 class Chat extends React.Component {
@@ -27,8 +26,10 @@ class Chat extends React.Component {
       text: "",
       messagesInDataBase: [],
       users: [],
-      currentUser: {}
+      currentUser: {},
+      endpoint: "http://localhost:5000"
     };
+    socket = io(this.state.endpoint);
   }
 
   componentDidMount() {
@@ -54,8 +55,13 @@ class Chat extends React.Component {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
 
-    socket = io(ENDPOINT);
-    console.log(socket);
+    socket.on("new_message", msg => {
+      console.log("new msg is: " + msg);
+    });
+
+    socket.on("chat_message", chatMsg => {
+      console.log("chat message is: " + chatMsg);
+    });
   }
 
   getAllUsers = async () => {
@@ -122,7 +128,11 @@ class Chat extends React.Component {
   };
 
   submitMessageToDataBase = async newMessage => {
+    socket = io();
     const text = newMessage.text;
+    // SOCKETS EMITTING MSG TO SERVER
+    socket.emit("chat_message", newMessage);
+
     console.log(text);
     const url = "/api/messages";
 
