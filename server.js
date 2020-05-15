@@ -18,12 +18,6 @@ io.on("connection", socket => {
 
   socket.emit("new_message", "you made it to socketville!");
 
-  // // LISTEN FOR CHAT MESSAGE
-  // socket.on("chat_message", chatMessage => {
-  //   console.log("new chat message is: " + chatMessage.text);
-  //   io.emit("chat_message", chatMessage.text);
-  // });
-
   socket.on("disconnect", () => {
     console.log("client has disconnected");
   });
@@ -43,30 +37,18 @@ app.get("/api/messages", async (req, res) => {
 
 //POST messagesy
 app.post("/api/messages", async (req, res) => {
-  // const newMessage = {
-  //   username: req.body.userName,
-  //   text: req.body.text
-  // };
+  const newMessage = {
+    id: req.body.id,
+    username: req.body.username,
+    text: req.body.text
+  };
   // console.log(req.body);
   const newMessageUserId = req.body.id;
   const newMessageText = req.body.text;
 
   dataAccess.createMessage(newMessageUserId, newMessageText);
-  // messages.push(newMember);
-  // res.send(exampleMessages);
-  io.on("connection", socket => {
-    console.log("a  socket connection in messages established");
 
-    socket.on("chat_message", newMessageText => {
-      console.log("new chat message is: ", newMessageText);
-      // io.emit("chat_message", newMessageText);
-    });
-    socket.emit("chat_message", newMessageText);
-
-    socket.on("disconnect", () => {
-      console.log("user disconnected from messages socket");
-    });
-  });
+  io.emit("chat_message", JSON.stringify(newMessage));
 });
 
 //GET all users

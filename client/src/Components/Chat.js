@@ -29,7 +29,7 @@ class Chat extends React.Component {
       currentUser: {},
       endpoint: "http://localhost:5000"
     };
-    socket = io(this.state.endpoint);
+    // socket = io(this.state.endpoint);
   }
 
   componentDidMount() {
@@ -49,18 +49,23 @@ class Chat extends React.Component {
 
     this.getAllUsers();
     this.getAllMessages();
+    socket = io("http://localhost:5000");
+
+    socket.on("new_message", msg => {
+      console.log("new msg is: " + msg);
+    });
   }
 
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
 
-    socket.on("new_message", msg => {
-      console.log("new msg is: " + msg);
-    });
+    socket = io("http://localhost:5000");
 
     socket.on("chat_message", chatMsg => {
-      console.log("chat message is: " + chatMsg);
+      // console.log("chat message is: " + chatMsg);
+      // console.log(JSON.parse(chatMsg));
+      this.submitMessageToDataBase(chatMsg);
     });
   }
 
