@@ -90,6 +90,7 @@ app.post("/api/login", async (req, res) => {
       })
     : console.log(userMatch);
   res.status(201).send({ userMatch });
+  io.emit("user_online", JSON.stringify(userMatch));
 });
 
 app.get("/*", async (req, res) => {

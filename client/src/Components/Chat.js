@@ -27,9 +27,10 @@ class Chat extends React.Component {
       messagesInDataBase: [],
       users: [],
       currentUser: {},
+      usersOnline: [],
       endpoint: "http://localhost:5000"
     };
-    // socket = io(this.state.endpoint);
+    socket = io(this.state.endpoint);
   }
 
   componentDidMount() {
@@ -42,22 +43,31 @@ class Chat extends React.Component {
 
     this.setState(
       {
-        currentUser: userStorage
+        currentUser: userStorage,
+        usersOnline: [...this.state.usersOnline, userStorage]
       },
-      () => console.log(this.state.currentUser)
+      () => console.log(this.state.usersOnline)
     );
 
     this.getAllUsers();
     this.getAllMessages();
-    socket = io("http://localhost:5000");
 
+    // socket CONNECTION listener
     socket.on("new_message", msg => {
-      console.log("new msg is: " + msg);
+      console.log("connection to socket message: " + msg);
     });
     console.log("component mounting");
 
+    // socker USER LOGIN listener
+    socket.on("user_online", userOnline => {
+      console.log(userOnline);
+      const parsedUserOnline = JSON.parse(userOnline);
+      console.log(parsedUserOnline);
+    });
+
+    // socket MESSAGE listener
     socket.on("chat_message", chatMsg => {
-      console.log("chat message is: " + chatMsg);
+      // console.log("chat message is: " + chatMsg);
       const parsedMsg = JSON.parse(chatMsg);
 
       this.setState({
@@ -69,27 +79,7 @@ class Chat extends React.Component {
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
-
-    // socket = io("http://localhost:5000");
-
-    // socket.on("chat_message", chatMsg => {
-    //   console.log("chat message is: " + chatMsg);
-    //   console.log(JSON.parse(chatMsg));
-    //   // this.submitMessageToDataBase(chatMsg);
-    // });
-    console.log("component updating");
   }
-
-  socketMessage = () => {
-    socket = io("http://localhost:5000");
-
-    socket.on("chat_message", chatMsg => {
-      console.log("chat message is: " + chatMsg);
-      console.log(JSON.parse(chatMsg));
-      // this.submitMessageToDataBase(chatMsg);
-    });
-    console.log("component updating");
-  };
 
   getAllUsers = async () => {
     const usersUrl = `/api/users`;
@@ -123,9 +113,7 @@ class Chat extends React.Component {
     this.setState({ text: event.target.value });
   };
 
-  handleSubmit = async event => {
-    event.preventDefault();
-    console.log(event.target);
+  handleSubmit = async () => {
     if (!this.state.text) {
       return null;
     }
@@ -149,16 +137,15 @@ class Chat extends React.Component {
       // () => console.log(this.state.currentMessages)
     );
 
-    console.log(this.state.messagesInDataBase);
+    // console.log(this.state.messagesInDataBase);
 
     this.setState({ text: "" });
   };
 
   submitMessageToDataBase = async newMessage => {
-    socket = io();
     const text = newMessage.text;
 
-    console.log(text);
+    // console.log(text);
     const url = "/api/messages";
 
     await axios
