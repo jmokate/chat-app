@@ -54,20 +54,42 @@ class Chat extends React.Component {
     socket.on("new_message", msg => {
       console.log("new msg is: " + msg);
     });
+    console.log("component mounting");
+
+    socket.on("chat_message", chatMsg => {
+      console.log("chat message is: " + chatMsg);
+      const parsedMsg = JSON.parse(chatMsg);
+
+      this.setState({
+        messagesInDataBase: [...this.state.messagesInDataBase, parsedMsg]
+      });
+    });
   }
 
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
 
+    // socket = io("http://localhost:5000");
+
+    // socket.on("chat_message", chatMsg => {
+    //   console.log("chat message is: " + chatMsg);
+    //   console.log(JSON.parse(chatMsg));
+    //   // this.submitMessageToDataBase(chatMsg);
+    // });
+    console.log("component updating");
+  }
+
+  socketMessage = () => {
     socket = io("http://localhost:5000");
 
     socket.on("chat_message", chatMsg => {
-      // console.log("chat message is: " + chatMsg);
-      // console.log(JSON.parse(chatMsg));
-      this.submitMessageToDataBase(chatMsg);
+      console.log("chat message is: " + chatMsg);
+      console.log(JSON.parse(chatMsg));
+      // this.submitMessageToDataBase(chatMsg);
     });
-  }
+    console.log("component updating");
+  };
 
   getAllUsers = async () => {
     const usersUrl = `/api/users`;
@@ -121,10 +143,10 @@ class Chat extends React.Component {
 
     this.setState(
       {
-        displayMessage: true,
-        messagesInDataBase: [...this.state.messagesInDataBase, newMessage]
-      },
-      () => console.log(this.state.currentMessages)
+        displayMessage: true
+        // messagesInDataBase: [...this.state.messagesInDataBase, newMessage]
+      }
+      // () => console.log(this.state.currentMessages)
     );
 
     console.log(this.state.messagesInDataBase);
@@ -135,8 +157,6 @@ class Chat extends React.Component {
   submitMessageToDataBase = async newMessage => {
     socket = io();
     const text = newMessage.text;
-    // SOCKETS EMITTING MSG TO SERVER
-    socket.emit("chat_message", newMessage);
 
     console.log(text);
     const url = "/api/messages";
