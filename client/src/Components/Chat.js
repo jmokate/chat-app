@@ -41,13 +41,9 @@ class Chat extends React.Component {
     }
     const userStorage = JSON.parse(sessionStorage.getItem("user"));
 
-    this.setState(
-      {
-        currentUser: userStorage,
-        usersOnline: [...this.state.usersOnline, userStorage]
-      },
-      () => console.log(this.state.usersOnline)
-    );
+    this.setState({
+      currentUser: userStorage
+    });
 
     this.getAllUsers();
     this.getAllMessages();
@@ -60,9 +56,16 @@ class Chat extends React.Component {
 
     // socker USER LOGIN listener
     socket.on("user_online", userOnline => {
-      console.log(userOnline);
+      // console.log(userOnline);
+      console.log("a new user has logged on through sockets");
       const parsedUserOnline = JSON.parse(userOnline);
       console.log(parsedUserOnline);
+      this.setState(
+        {
+          usersOnline: [...this.state.usersOnline, parsedUserOnline]
+        },
+        () => console.log(this.state.usersOnline)
+      );
     });
 
     // socket MESSAGE listener
@@ -87,6 +90,7 @@ class Chat extends React.Component {
       .get(usersUrl)
       .then(response => {
         const users = response.data;
+        const currentUser = this.state.currentUser;
 
         this.setState({
           users: users
@@ -198,7 +202,7 @@ class Chat extends React.Component {
         />
       );
     });
-    const users = this.state.users;
+    const users = this.state.usersOnline;
 
     let renderUsers = users.map(user => {
       return user.id == currentId ? (
