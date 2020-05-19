@@ -59,7 +59,8 @@ class Chat extends React.Component {
       // console.log(userOnline);
       console.log("a new user has logged on through sockets");
       const parsedUserOnline = JSON.parse(userOnline);
-      console.log(parsedUserOnline);
+      // console.log(parsedUserOnline);
+      this.onlineUser(parsedUserOnline);
       this.setState(
         {
           usersOnline: [...this.state.usersOnline, parsedUserOnline]
