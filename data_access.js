@@ -35,6 +35,21 @@ queryUsers = async () => {
   }
 };
 
+//get all users that are ONLINE
+queryActiveUsers = async () => {
+  try {
+    console.log("connected to users in database");
+    const results = await client.query(
+      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
+    );
+    // console.table(results.rows);
+    return results.rows;
+  } catch (err) {
+    console.log(`something is not right ${err}`);
+    return [];
+  }
+};
+
 //create a user in db
 createUser = async (username, password) => {
   try {
@@ -112,6 +127,7 @@ createMessage = async (userId, text) => {
 module.exports = {
   connectToDb,
   queryUsers,
+  queryActiveUsers,
   queryAllMessages,
   loginUser,
   createMessage,

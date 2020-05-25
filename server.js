@@ -53,13 +53,18 @@ app.post("/api/messages", async (req, res) => {
 
 //GET all users
 app.get("/api/users", async (req, res) => {
-  const users = await dataAccess.queryUsers();
+  if (req.query.active === "true") {
+    const users = await dataAccess.queryActiveUsers();
+    res.send(users);
+  } else {
+    const users = await dataAccess.queryUsers();
 
-  // let users = messages.map(message => {
-  //   return message.user;
-  // });
+    // let users = messages.map(message => {
+    //   return message.user;
+    // });
 
-  res.send(users);
+    res.send(users);
+  }
 });
 
 //CREATE a user (CREATE user)

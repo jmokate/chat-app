@@ -60,7 +60,7 @@ class Chat extends React.Component {
       console.log("a new user has logged on through sockets");
       const parsedUserOnline = JSON.parse(userOnline);
       // console.log(parsedUserOnline);
-      this.onlineUser(parsedUserOnline);
+
       this.setState(
         {
           usersOnline: [...this.state.usersOnline, parsedUserOnline]
@@ -86,7 +86,7 @@ class Chat extends React.Component {
   }
 
   getAllUsers = async () => {
-    const usersUrl = `/api/users`;
+    const usersUrl = `/api/users?active=true`;
     await axios
       .get(usersUrl)
       .then(response => {
@@ -94,7 +94,7 @@ class Chat extends React.Component {
         const currentUser = this.state.currentUser;
 
         this.setState({
-          users: users
+          usersOnline: users
         });
         console.log(users);
       })
@@ -206,9 +206,7 @@ class Chat extends React.Component {
     const users = this.state.usersOnline;
 
     let renderUsers = users.map(user => {
-      return user.id == currentId ? (
-        <Users key={user.id} userName={user.username} className={"you"} />
-      ) : (
+      return user.id == currentId ? null : (
         <Users
           key={user.id}
           userName={user.username}
@@ -216,6 +214,15 @@ class Chat extends React.Component {
         />
       );
     });
+    const { currentUser } = this.state;
+    renderUsers.push(
+      <Users
+        key={currentUser.id}
+        userName={currentUser.userName}
+        className={"you"}
+      />
+    );
+    console.log(currentUser);
 
     return (
       <div>
