@@ -93,7 +93,8 @@ loginUser = async (name, password) => {
     console.log(name);
     console.log("getting a message by id in messages");
     const results = await client.query(
-      `SELECT * FROM users WHERE username = '${name}'`
+      `SELECT * FROM users WHERE username = '${name}';
+       UPDATE users SET last_active_at = NOW() WHERE username = '${name}';`
     );
     saltedPassword = results.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, saltedPassword);
