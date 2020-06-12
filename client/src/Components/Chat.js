@@ -134,15 +134,9 @@ class Chat extends React.Component {
 
     this.submitMessageToDataBase(newMessage);
 
-    this.setState(
-      {
-        displayMessage: true
-        // messagesInDataBase: [...this.state.messagesInDataBase, newMessage]
-      }
-      // () => console.log(this.state.currentMessages)
-    );
-
-    // console.log(this.state.messagesInDataBase);
+    this.setState({
+      displayMessage: true
+    });
 
     this.setState({ text: "" });
   };
@@ -217,12 +211,11 @@ class Chat extends React.Component {
     const { currentUser } = this.state;
     renderUsers.push(
       <Users
-        key={currentUser.id}
+        key={currentId}
         userName={currentUser.userName}
         className={"you"}
       />
     );
-    console.log(currentUser);
 
     return (
       <div>

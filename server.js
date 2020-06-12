@@ -48,6 +48,7 @@ app.post("/api/messages", async (req, res) => {
 
   dataAccess.createMessage(newMessageUserId, newMessageText);
 
+  //update the user and set last_active_at to NOW
   io.emit("chat_message", JSON.stringify(newMessage));
 });
 
@@ -95,6 +96,7 @@ app.post("/api/login", async (req, res) => {
       })
     : console.log(userMatch);
   res.status(201).send({ userMatch });
+  //update user's last active date to now
   io.emit("user_online", JSON.stringify(userMatch));
 });
 
