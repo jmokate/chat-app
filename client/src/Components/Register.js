@@ -58,14 +58,17 @@ class Register extends React.Component {
         "Username and Password fields must be filled out and cannot contain any spaces"
       );
     }
+    else {
+      const newUser = {
+        userName: userName,
+        password: password
+      };
+      console.log(newUser);
+  
+      this.registerUser(newUser);
 
-    const newUser = {
-      userName: userName,
-      password: password
-    };
-    console.log(newUser);
-
-    this.registerUser(newUser);
+    }
+    
   };
 
   registerUser = async user => {

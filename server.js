@@ -87,9 +87,7 @@ app.post("/api/login", async (req, res) => {
   const password = req.body.password;
   console.log(loginName);
   const userMatch = await dataAccess.loginUser(loginName, password);
-  // const userMatch = exampleMessages.filter(
-  //   message => message.id === parseInt(req.params.id)
-  // );
+ 
   !userMatch
     ? res.status(401).json({
         message: "sorry, incorrect username or password"

@@ -92,14 +92,18 @@ loginUser = async (name, password) => {
   try {
     console.log(name);
     console.log("getting a message by id in messages");
+    await client.query("BEGIN")
     const results = await client.query(
-      `SELECT * FROM users WHERE username = '${name}';
-       UPDATE users SET last_active_at = NOW() WHERE username = '${name}';`
+      `SELECT * FROM users WHERE username = '${name}';`
     );
     saltedPassword = results.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, saltedPassword);
     // console.table(results.rows[0]);
     if (passwordMatch) {
+      await client.query(
+        `UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
+      )
+      await client.query("COMMIT")
       return results.rows[0];
     }
     return false;
@@ -117,6 +121,9 @@ createMessage = async (userId, text) => {
       "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id",
       [userId, text]
     );
+    await client.query(
+      `UPDATE users SET last_active_at = NOW() WHERE id = '${userId}'`
+    )
     await client.query("COMMIT");
     // console.log(`new message by ${userId} that says ${text}`);
   } catch (err) {
@@ -124,6 +131,15 @@ createMessage = async (userId, text) => {
     await client.query("ROLLBACK");
   }
 };
+
+// updateLastActiveAt = async (user) => {
+//   try {
+//     await client.query("BEGIN");
+//     await client.query(
+//       "UPDATE users SET last_active_at = NOW() WHERE id =  "
+//     )
+//   }
+// }
 
 module.exports = {
   connectToDb,
