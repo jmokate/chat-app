@@ -110,6 +110,7 @@ class Chat extends React.Component {
         this.setState({
           messagesInDataBase: messages
         });
+        console.log(messages)
       })
       .catch(err => console.log(err));
   };
@@ -187,12 +188,14 @@ class Chat extends React.Component {
         <Message
           userName={message.username}
           text={message.text}
+          createdDate={message.created_date}
           className={"you"}
         />
       ) : (
         <Message
           userName={message.username}
           text={message.text}
+          createdDate={message.created_date}
           className={"users-online"}
         />
       );

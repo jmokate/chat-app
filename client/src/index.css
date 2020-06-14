@@ -97,6 +97,11 @@ body {
   color: #aaa;
 }
 
+.moment {
+  color: #ddd;
+  font-size: .5em;
+}
+
 .chat-font {
   color: whitesmoke;
   white-space: pre;
