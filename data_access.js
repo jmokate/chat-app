@@ -106,10 +106,10 @@ loginUser = async (name, password) => {
       await client.query("COMMIT")
       return results.rows[0];
     }
-    return false;
+    // return false;
   } catch (err) {
     console.log(`something is not right with the id ${name}`);
-    return [];
+    return false;
   }
 };
 

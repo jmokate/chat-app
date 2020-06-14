@@ -73,9 +73,7 @@ class Login extends React.Component {
     await axios
       .post(`/api/login`, user)
       .then(response => {
-        if (response.status == 401) {
-          alert(response.data.message)
-        }
+        console.log(response)
         if (response.status == 201) {
           console.log("successful login!");
           console.log(response.data);
