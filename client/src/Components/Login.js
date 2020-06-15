@@ -79,7 +79,7 @@ class Login extends React.Component {
           console.log(response.data);
 
           const userLogin = {
-            userName: response.data.userMatch.username,
+            userName: response.data.userMatch.username.toUpperCase(),
             id: response.data.userMatch.id
           };
           console.log(userLogin);

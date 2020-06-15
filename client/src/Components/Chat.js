@@ -206,7 +206,7 @@ class Chat extends React.Component {
       return user.id == currentId ? ( null ) : (
         <Users
           key={user.id}
-          userName={user.username}
+          userName={user.username.toUpperCase()}
           className={"users-online"}
         />
       );
