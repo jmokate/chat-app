@@ -99,7 +99,7 @@ body {
 
 .moment {
   color: #bbb;
-  font-size: .5em;
+  font-size: 0.5em;
 }
 
 .chat-font {
@@ -125,14 +125,12 @@ body {
 .messageMomentInfo {
   margin-top: -10px;
   vertical-align: top;
-  
 }
 
 .messages {
   max-width: 100%;
   text-align: left;
   padding-bottom: 5px;
-  
 }
 
 /* css for login */

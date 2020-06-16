@@ -26,19 +26,15 @@ class Login extends React.Component {
   }
 
   handleNameChange = e => {
-    this.setState(
-      {
-        userName: e.target.value
-      }
-    );
+    this.setState({
+      userName: e.target.value
+    });
   };
 
   handlePassChange = e => {
-    this.setState(
-      {
-        password: e.target.value
-      }
-    );
+    this.setState({
+      password: e.target.value
+    });
   };
 
   handleSubmit = e => {
@@ -53,16 +49,13 @@ class Login extends React.Component {
       alert(
         "Username and Password fields must be filled out and cannot contain any spaces"
       );
-    }
-    else {
+    } else {
       const newUser = {
         userName: userName,
         password: password
       };
       this.loginUser(newUser);
-
     }
-    
   };
 
   loginUser = async user => {
@@ -73,13 +66,13 @@ class Login extends React.Component {
     await axios
       .post(`/api/login`, user)
       .then(response => {
-        console.log(response)
+        console.log(response);
         if (response.status == 201) {
           console.log("successful login!");
           console.log(response.data);
 
           const userLogin = {
-            userName: response.data.userMatch.username.toUpperCase(),
+            userName: response.data.userMatch.username,
             id: response.data.userMatch.id
           };
           console.log(userLogin);

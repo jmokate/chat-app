@@ -39,8 +39,11 @@ queryUsers = async () => {
 queryActiveUsers = async () => {
   try {
     console.log("connected to users in database");
+    // const results = await client.query(
+    //   "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
+    // );
     const results = await client.query(
-      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
+      "SELECT * FROM users WHERE is_logged_in = true"
     );
     // console.table(results.rows);
     return results.rows;
@@ -77,12 +80,12 @@ queryAllMessages = async () => {
   try {
     console.log("connected to messages in database");
     const results = await client.query(
-      "SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
+      "SELECT m.user_id, m.id, m.text, m.created_date, u.username, u.id FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
     );
     // const results = await client.query(
     //   "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
     // );
-    console.table(results.rows);
+    // console.table(results.rows);
     return results.rows;
   } catch (err) {
     console.log(`something went wrong ${err}`);
@@ -106,12 +109,32 @@ loginUser = async (name, password) => {
       await client.query(
         `UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
       );
+      await client.query(
+        `UPDATE users SET is_logged_in = true WHERE username = '${name}'`
+      );
       await client.query("COMMIT");
       return results.rows[0];
     }
     // return false;
   } catch (err) {
     console.log(`something is not right with the id ${name}`);
+    return false;
+  }
+};
+
+logOutUser = async name => {
+  try {
+    await client.query("BEGIN");
+    const results = await client.query(
+      `SELECT * FROM users WHERE username = '${name}'`
+    );
+    await client.query(
+      `UPDATE users SET is_logged_in = false WHERE username = '${name}'`
+    );
+    await client.query("COMMIT");
+    return results.rows[0];
+  } catch (err) {
+    console.log("there is a problem with logging out the user");
     return false;
   }
 };
@@ -146,6 +169,7 @@ module.exports = {
   queryActiveUsers,
   queryAllMessages,
   loginUser,
+  logOutUser,
   createMessage,
   createUser
 };

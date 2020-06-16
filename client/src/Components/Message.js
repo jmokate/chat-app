@@ -7,7 +7,7 @@ function Message(props) {
     <div className='messages'>
       <div className='messageUserName'>
         <span className={props.className}>
-          {props.userName.toUpperCase()}{" "}
+          {props.userName.toUpperCase()}
           <span className='moment'>{moment(props.createdDate).calendar()}</span>
         </span>
       </div>

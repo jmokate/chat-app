@@ -101,6 +101,22 @@ app.post("/api/login", async (req, res) => {
   io.emit("user_online", JSON.stringify(userMatch));
 });
 
+app.post("/api/logout", async (req, res) => {
+  const logOutName = req.body.userName;
+
+  console.log(logOutName);
+  const userMatch = await dataAccess.logOutUser(logOutName);
+
+  !userMatch
+    ? res.status(401).json({
+        message: "there was an issue logging out"
+      })
+    : //   : console.log(userMatch);
+      res.status(201).send({ userMatch });
+  //update user's last active date to now
+  io.emit("user_disconnect", JSON.stringify(userMatch));
+});
+
 app.get("/*", async (req, res) => {
   //res.send("hiya");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
