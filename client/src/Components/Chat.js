@@ -77,7 +77,7 @@ class Chat extends React.Component {
       this.setState(prevState => ({
         usersOnline: prevState.usersOnline.filter(
           person => {
-            return person !== parsedUserDisconnect;
+            return person !== parsedUserDisconnect.id;
           },
           () => console.log(this.state.usersOnline)
         )
@@ -193,6 +193,15 @@ class Chat extends React.Component {
       .post(url, currentUser)
       .then(response => console.log(response))
       .catch(err => console.log(err));
+
+    this.setState(prevState => ({
+      usersOnline: prevState.usersOnline.filter(
+        person => {
+          return person !== currentUser.id;
+        },
+        () => console.log(this.state.usersOnline)
+      )
+    }));
     sessionStorage.removeItem("user");
     history.push("/login");
   };
