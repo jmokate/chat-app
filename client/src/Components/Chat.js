@@ -110,7 +110,7 @@ class Chat extends React.Component {
         this.setState({
           messagesInDataBase: messages
         });
-        console.log(messages)
+        console.log(messages);
       })
       .catch(err => console.log(err));
   };
@@ -203,7 +203,7 @@ class Chat extends React.Component {
     const users = this.state.usersOnline;
 
     let renderUsers = users.map(user => {
-      return user.id == currentId ? ( null ) : (
+      return user.id == currentId ? null : (
         <Users
           key={user.id}
           userName={user.username.toUpperCase()}

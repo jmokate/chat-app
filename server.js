@@ -33,11 +33,12 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/api/messages", async (req, res) => {
   const messages = await dataAccess.queryAllMessages();
   res.send(messages);
+  // console.log(messages);
 });
 
 //POST messagesy
 app.post("/api/messages", async (req, res) => {
-  const newMessage = {
+  let newMessage = {
     id: req.body.id,
     username: req.body.username,
     text: req.body.text
@@ -45,11 +46,13 @@ app.post("/api/messages", async (req, res) => {
   // console.log(req.body);
   const newMessageUserId = req.body.id;
   const newMessageText = req.body.text;
+  // const newMessageCreated = null;
 
   dataAccess.createMessage(newMessageUserId, newMessageText);
 
   //update the user and set last_active_at to NOW
   io.emit("chat_message", JSON.stringify(newMessage));
+  console.log(newMessage);
 });
 
 //GET all users
@@ -87,7 +90,7 @@ app.post("/api/login", async (req, res) => {
   const password = req.body.password;
   console.log(loginName);
   const userMatch = await dataAccess.loginUser(loginName, password);
-  console.log('the user match returns as ', userMatch)
+  console.log("the user match returns as ", userMatch);
   !userMatch
     ? res.status(401).json({
         message: "sorry, incorrect username or password"

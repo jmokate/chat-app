@@ -77,9 +77,12 @@ queryAllMessages = async () => {
   try {
     console.log("connected to messages in database");
     const results = await client.query(
-      "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
+      "SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
     );
-    // console.table(results.rows);
+    // const results = await client.query(
+    //   "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
+    // );
+    console.table(results.rows);
     return results.rows;
   } catch (err) {
     console.log(`something went wrong ${err}`);
@@ -92,7 +95,7 @@ loginUser = async (name, password) => {
   try {
     console.log(name);
     console.log("getting a message by id in messages");
-    await client.query("BEGIN")
+    await client.query("BEGIN");
     const results = await client.query(
       `SELECT * FROM users WHERE username = '${name}';`
     );
@@ -102,8 +105,8 @@ loginUser = async (name, password) => {
     if (passwordMatch) {
       await client.query(
         `UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
-      )
-      await client.query("COMMIT")
+      );
+      await client.query("COMMIT");
       return results.rows[0];
     }
     // return false;
@@ -114,32 +117,28 @@ loginUser = async (name, password) => {
 };
 
 //create a message in the db
-createMessage = async (userId, text) => {
+createMessage = async (userId, text, createdDate) => {
   try {
     await client.query("BEGIN");
     await client.query(
-      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id",
+      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id, created_date",
       [userId, text]
     );
+    // const createdDate = await client.query(
+    // `SELECT created_date FROM messages WHERE user_id = ${userId} AND text = ${text}`
+    // );
     await client.query(
       `UPDATE users SET last_active_at = NOW() WHERE id = '${userId}'`
-    )
+    );
+    // const result = await client.query("SELECT created_date FROM messages WHERE id = 105;")
     await client.query("COMMIT");
+    // console.table(createdDate.rows[0]);
     // console.log(`new message by ${userId} that says ${text}`);
   } catch (err) {
     console.log(`there was an error with ${(userId, text)}`);
     await client.query("ROLLBACK");
   }
 };
-
-// updateLastActiveAt = async (user) => {
-//   try {
-//     await client.query("BEGIN");
-//     await client.query(
-//       "UPDATE users SET last_active_at = NOW() WHERE id =  "
-//     )
-//   }
-// }
 
 module.exports = {
   connectToDb,
