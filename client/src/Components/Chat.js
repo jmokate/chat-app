@@ -77,11 +77,15 @@ class Chat extends React.Component {
       this.setState(prevState => ({
         usersOnline: prevState.usersOnline.filter(
           person => {
-            return person !== parsedUserDisconnect.id;
+            return person.id !== parsedUserDisconnect.id;
           },
           () => console.log(this.state.usersOnline)
         )
       }));
+    });
+
+    socket.on("disconnect", message => {
+      console.log(message);
     });
 
     // socket MESSAGE listener
@@ -197,7 +201,7 @@ class Chat extends React.Component {
     this.setState(prevState => ({
       usersOnline: prevState.usersOnline.filter(
         person => {
-          return person !== currentUser.id;
+          return person.id !== currentUser.id;
         },
         () => console.log(this.state.usersOnline)
       )

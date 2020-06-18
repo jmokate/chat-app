@@ -19,6 +19,7 @@ io.on("connection", socket => {
   socket.emit("new_message", "you made it to socketville!");
 
   socket.on("disconnect", () => {
+    io.emit("disconnect", "user closed a browser and it getting logged out");
     console.log("client has disconnected");
   });
 });
