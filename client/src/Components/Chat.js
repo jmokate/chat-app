@@ -84,6 +84,9 @@ class Chat extends React.Component {
       }));
     });
 
+    // window.addEventListener("beforeunload", this.handleLogout);
+    window.onunload = this.handleLogout;
+
     socket.on("disconnect", message => {
       console.log(message);
     });
