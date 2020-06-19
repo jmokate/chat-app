@@ -85,7 +85,8 @@ class Chat extends React.Component {
     });
 
     // window.addEventListener("beforeunload", this.handleLogout);
-    window.onunload = this.handleLogout;
+    // window.onunload = this.handleLogout;
+    console.log("chat rendering");
 
     socket.on("disconnect", message => {
       console.log(message);
@@ -105,6 +106,8 @@ class Chat extends React.Component {
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
+
+    window.onunload = this.handleLogout;
   }
 
   getAllUsers = async () => {
@@ -222,8 +225,9 @@ class Chat extends React.Component {
     }
 
     let renderMessage = messages.map(message => {
-      return message.id == currentId ? (
+      return message.user_id == currentId ? (
         <Message
+          key={message.id}
           userName={message.username}
           text={message.text}
           createdDate={message.created_date}
@@ -231,6 +235,7 @@ class Chat extends React.Component {
         />
       ) : (
         <Message
+          key={message.id}
           userName={message.username}
           text={message.text}
           createdDate={message.created_date}

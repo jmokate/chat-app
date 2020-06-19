@@ -117,7 +117,6 @@ app.post("/api/logout", async (req, res) => {
       res.status(201).send({ userMatch });
   //update user's last active date to now
   io.emit("user_disconnect", JSON.stringify(userMatch));
-  io.emit("disconnect", JSON.stringify(userMatch));
 });
 
 app.get("/*", async (req, res) => {

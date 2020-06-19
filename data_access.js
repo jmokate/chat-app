@@ -80,12 +80,13 @@ queryAllMessages = async () => {
   try {
     console.log("connected to messages in database");
     const results = await client.query(
-      "SELECT m.user_id, m.id, m.text, m.created_date, u.username, u.id FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
+      "SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
     );
     // const results = await client.query(
     //   "SELECT * FROM messages JOIN users ON messages.user_id = users.id"
     // );
     // console.table(results.rows);
+    console.table(results.rows[0]);
     return results.rows;
   } catch (err) {
     console.log(`something went wrong ${err}`);
