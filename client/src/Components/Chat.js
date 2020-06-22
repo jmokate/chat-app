@@ -107,7 +107,7 @@ class Chat extends React.Component {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
 
-    window.onunload = this.handleLogout;
+    // window.onunload = this.handleLogout;
   }
 
   getAllUsers = async () => {

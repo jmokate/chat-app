@@ -119,6 +119,10 @@ app.post("/api/logout", async (req, res) => {
   io.emit("user_disconnect", JSON.stringify(userMatch));
 });
 
+app.put("/api/logout/:id", async (req, res) => {
+  let id = req.params.id;
+});
+
 app.get("/*", async (req, res) => {
   //res.send("hiya");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
