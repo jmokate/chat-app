@@ -140,6 +140,24 @@ logOutUser = async name => {
   }
 };
 
+putLogoutUser = async id => {
+  try {
+    await client.query("BEGIN");
+    const results = await client.query(
+      `SELECT * FROM users WHERE id = '${id}'`
+    );
+    await client.query(
+      `UPDATE users SET is_logged_in = false WHERE id = '${id}'`
+    );
+    await client.query("COMMIT");
+    console.table(results.rows[0]);
+    // return results.rows[0];
+  } catch (err) {
+    console.log("there is a problem with logging out the user");
+    return false;
+  }
+};
+
 //create a message in the db
 createMessage = async (userId, text, createdDate) => {
   try {
@@ -171,6 +189,7 @@ module.exports = {
   queryAllMessages,
   loginUser,
   logOutUser,
+  putLogoutUser,
   createMessage,
   createUser
 };

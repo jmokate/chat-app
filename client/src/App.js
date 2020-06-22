@@ -10,18 +10,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
   componentDidMount() {
+    const userStorage = JSON.parse(sessionStorage.getItem("user"));
+
     window.addEventListener("beforeunload", function(e) {
-      const userStorage = JSON.parse(sessionStorage.getItem("user"));
-      const id = userStorage.id;
-      console.log("app.js user storage id is ", id);
-      let confirmationMessage = "tab close";
-      (e || window.event).returnValue = confirmationMessage;
-      alert(confirmationMessage);
-      axios.put(`/api/logout/${id}`, {
-        is_logged_in: false
-      });
+      if (userStorage) {
+        return false;
+      } else {
+        const id = userStorage.id;
+        console.log("app.js user storage id is ", id);
+        let confirmationMessage = "tab close";
+        (e || window.event).returnValue = confirmationMessage;
+        alert(confirmationMessage);
+        axios
+          .put(`/api/logout/${id}`)
+          .then(response => console.log(response))
+          .catch(error => console.log(error));
+      }
     });
   }
+
   render() {
     return (
       <div className='App'>

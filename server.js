@@ -120,7 +120,14 @@ app.post("/api/logout", async (req, res) => {
 });
 
 app.put("/api/logout/:id", async (req, res) => {
+  console.log("put request route hit");
   let id = req.params.id;
+
+  putUserLogout = await dataAccess.putLogoutUser(id);
+
+  console.log("id in PUT is ", id);
+
+  io.emit("browser_disconnect", id);
 });
 
 app.get("/*", async (req, res) => {

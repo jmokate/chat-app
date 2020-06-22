@@ -69,6 +69,18 @@ class Chat extends React.Component {
       );
     });
 
+    socket.on("browser_disconnect", id => {
+      console.log("brower disconnect");
+      // this.setState(prevState => ({
+      //   usersOnline: prevState.usersOnline.filter(
+      //     person => {
+      //       return person.id !== id;
+      //     },
+      //     () => console.log(this.state.usersOnline)
+      //   )
+      // }));
+    });
+
     socket.on("user_disconnect", userDisconnect => {
       console.log("a user has left the chat");
       const parsedUserDisconnect = JSON.parse(userDisconnect);
@@ -85,7 +97,8 @@ class Chat extends React.Component {
     });
 
     // window.addEventListener("beforeunload", this.handleLogout);
-    // window.onunload = this.handleLogout;
+    // window.onunload = this.putLogout;
+
     console.log("chat rendering");
 
     socket.on("disconnect", message => {
@@ -215,6 +228,16 @@ class Chat extends React.Component {
     sessionStorage.removeItem("user");
     history.push("/login");
   };
+
+  // putLogout = async () => {
+  //   console.log("putting logout");
+  //   const userStorage = JSON.parse(sessionStorage.getItem("user"));
+  //   const id = userStorage.id;
+  //   axios
+  //     .put(`/api/logout/${id}`)
+  //     .then(response => console.log(response))
+  //     .catch(error => console.log(error));
+  // };
 
   render() {
     const messages = this.state.messagesInDataBase;
