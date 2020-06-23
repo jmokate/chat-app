@@ -226,6 +226,7 @@ class Chat extends React.Component {
       )
     }));
     sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
     history.push("/login");
   };
 

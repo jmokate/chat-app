@@ -77,6 +77,7 @@ class Login extends React.Component {
           };
           console.log(userLogin);
           sessionStorage.setItem("user", JSON.stringify(userLogin));
+          localStorage.setItem("user", JSON.stringify(userLogin));
           history.push("/");
         }
       })
