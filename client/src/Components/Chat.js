@@ -35,11 +35,11 @@ class Chat extends React.Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const checkStorage = sessionStorage.getItem("user");
+    const checkStorage = localStorage.getItem("user");
     if (!checkStorage) {
       history.push("/login");
     }
-    const userStorage = JSON.parse(sessionStorage.getItem("user"));
+    const userStorage = JSON.parse(localStorage.getItem("user"));
 
     this.setState({
       currentUser: userStorage
@@ -119,8 +119,6 @@ class Chat extends React.Component {
   componentDidUpdate() {
     const scrollDiv = document.querySelector(".messagesContainer");
     scrollDiv.scrollTop = scrollDiv.scrollHeight;
-
-    // window.onunload = this.handleLogout;
   }
 
   getAllUsers = async () => {
@@ -225,20 +223,10 @@ class Chat extends React.Component {
         () => console.log(this.state.usersOnline)
       )
     }));
-    sessionStorage.removeItem("user");
+
     localStorage.removeItem("user");
     history.push("/login");
   };
-
-  // putLogout = async () => {
-  //   console.log("putting logout");
-  //   const userStorage = JSON.parse(sessionStorage.getItem("user"));
-  //   const id = userStorage.id;
-  //   axios
-  //     .put(`/api/logout/${id}`)
-  //     .then(response => console.log(response))
-  //     .catch(error => console.log(error));
-  // };
 
   render() {
     const messages = this.state.messagesInDataBase;

@@ -21,7 +21,7 @@ class Register extends React.Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const checkStorage = sessionStorage.getItem("user");
+    const checkStorage = localStorage.getItem("user");
     if (checkStorage) {
       history.push("/loggedin");
     }
@@ -89,7 +89,6 @@ class Register extends React.Component {
           };
           console.log(newUser);
 
-          sessionStorage.setItem("user", JSON.stringify(newUser));
           localStorage.setItem("user", JSON.stringify(newUser));
           history.push("/");
         }

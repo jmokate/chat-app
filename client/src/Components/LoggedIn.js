@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Form, Button, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 class LoggedIn extends React.Component {
   state = {
@@ -10,7 +11,7 @@ class LoggedIn extends React.Component {
   componentDidMount() {
     const { history } = this.props;
     console.log("mount");
-    const checkStorage = sessionStorage.getItem("user");
+    const checkStorage = localStorage.getItem("user");
     if (checkStorage) {
       this.setState({ isLoggedIn: true });
     } else if (!checkStorage) {
@@ -26,12 +27,20 @@ class LoggedIn extends React.Component {
 
   handleLogOut = () => {
     const { history } = this.props;
-    sessionStorage.removeItem("user");
+
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const id = currentUser.id;
+
+    axios
+      .put(`/api/logout/${id}`)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+    localStorage.removeItem("user");
     history.push("/login");
   };
 
   render() {
-    const LoggedInUser = JSON.parse(sessionStorage.getItem("user"));
+    const LoggedInUser = JSON.parse(localStorage.getItem("user"));
 
     return (
       <Container fluid id='login-container' className='justify-content-center'>

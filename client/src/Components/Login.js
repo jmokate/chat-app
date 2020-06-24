@@ -19,7 +19,7 @@ class Login extends React.Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const checkStorage = sessionStorage.getItem("user");
+    const checkStorage = localStorage.getItem("user");
     if (checkStorage) {
       history.push("/loggedin");
     }
@@ -76,7 +76,7 @@ class Login extends React.Component {
             id: response.data.userMatch.id
           };
           console.log(userLogin);
-          sessionStorage.setItem("user", JSON.stringify(userLogin));
+
           localStorage.setItem("user", JSON.stringify(userLogin));
           history.push("/");
         }
