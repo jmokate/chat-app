@@ -83,21 +83,18 @@ class Chat extends React.Component {
 
     socket.on("user_disconnect", userDisconnect => {
       console.log("a user has left the chat");
-      const parsedUserDisconnect = JSON.parse(userDisconnect);
-      console.log(parsedUserDisconnect);
+      const parsedUserDisconnectId = JSON.parse(userDisconnect);
+      console.log(parsedUserDisconnectId);
 
       this.setState(prevState => ({
         usersOnline: prevState.usersOnline.filter(
           person => {
-            return person.id !== parsedUserDisconnect.id;
+            return person.id !== parsedUserDisconnectId;
           },
           () => console.log(this.state.usersOnline)
         )
       }));
     });
-
-    // window.addEventListener("beforeunload", this.handleLogout);
-    // window.onunload = this.putLogout;
 
     console.log("chat rendering");
 
@@ -206,9 +203,11 @@ class Chat extends React.Component {
   };
 
   handleLogout = async () => {
+    const { history } = this.props;
+
     const url = "/api/logout";
     const { currentUser } = this.state;
-    const { history } = this.props;
+
     console.log(currentUser);
     await axios
       .post(url, currentUser)

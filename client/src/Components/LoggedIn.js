@@ -28,13 +28,13 @@ class LoggedIn extends React.Component {
   handleLogOut = () => {
     const { history } = this.props;
 
-    const currentUser = JSON.parse(localStorage.getItem("user"));
-    const id = currentUser.id;
+    // const currentUser = JSON.parse(localStorage.getItem("user"));
+    // const id = currentUser.id;
 
-    axios
-      .put(`/api/logout/${id}`)
-      .then(response => console.log(response))
-      .catch(err => console.log(err));
+    // axios
+    //   .put(`/api/logout/${id}`)
+    //   .then(response => console.log(response))
+    //   .catch(err => console.log(err));
     localStorage.removeItem("user");
     history.push("/login");
   };

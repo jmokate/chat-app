@@ -39,12 +39,12 @@ queryUsers = async () => {
 queryActiveUsers = async () => {
   try {
     console.log("connected to users in database");
-    // const results = await client.query(
-    //   "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
-    // );
     const results = await client.query(
-      "SELECT * FROM users WHERE is_logged_in = true"
+      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
     );
+    // const results = await client.query(
+    //   "SELECT * FROM users WHERE is_logged_in = true"
+    // );
     // console.table(results.rows);
     return results.rows;
   } catch (err) {
@@ -110,9 +110,9 @@ loginUser = async (name, password) => {
       await client.query(
         `UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
       );
-      await client.query(
-        `UPDATE users SET is_logged_in = true WHERE username = '${name}'`
-      );
+      // await client.query(
+      //   `UPDATE users SET is_logged_in = true WHERE username = '${name}'`
+      // );
       await client.query("COMMIT");
       return results.rows[0];
     }
@@ -123,22 +123,22 @@ loginUser = async (name, password) => {
   }
 };
 
-logOutUser = async name => {
-  try {
-    await client.query("BEGIN");
-    const results = await client.query(
-      `SELECT * FROM users WHERE username = '${name}'`
-    );
-    await client.query(
-      `UPDATE users SET is_logged_in = false WHERE username = '${name}'`
-    );
-    await client.query("COMMIT");
-    return results.rows[0];
-  } catch (err) {
-    console.log("there is a problem with logging out the user");
-    return false;
-  }
-};
+// logOutUser = async name => {
+//   try {
+//     await client.query("BEGIN");
+//     const results = await client.query(
+//       `SELECT * FROM users WHERE username = '${name}'`
+//     );
+//     await client.query(
+//       `UPDATE users SET is_logged_in = false WHERE username = '${name}'`
+//     );
+//     await client.query("COMMIT");
+//     return results.rows[0];
+//   } catch (err) {
+//     console.log("there is a problem with logging out the user");
+//     return false;
+//   }
+// };
 
 putLogoutUser = async id => {
   try {
@@ -188,7 +188,6 @@ module.exports = {
   queryActiveUsers,
   queryAllMessages,
   loginUser,
-  logOutUser,
   putLogoutUser,
   createMessage,
   createUser

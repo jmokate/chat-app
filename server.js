@@ -91,7 +91,7 @@ app.post("/api/login", async (req, res) => {
   const password = req.body.password;
   console.log(loginName);
   const userMatch = await dataAccess.loginUser(loginName, password);
-  console.log("the user match returns as ", userMatch);
+  // console.log("the user match returns as ", userMatch);
   !userMatch
     ? res.status(401).json({
         message: "sorry, incorrect username or password"
@@ -104,19 +104,20 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/logout", async (req, res) => {
-  const logOutName = req.body.userName;
+  const id = req.body.id;
 
-  console.log(logOutName);
-  const userMatch = await dataAccess.logOutUser(logOutName);
+  console.log("the req body info on user is ", id);
+  // const userMatch = await dataAccess.logOutUser(logOutName);
 
-  !userMatch
-    ? res.status(401).json({
-        message: "there was an issue logging out"
-      })
-    : //   : console.log(userMatch);
-      res.status(201).send({ userMatch });
+  // !userMatch
+  //   ? res.status(401).json({
+  //       message: "there was an issue logging out"
+  //     })
+  //   : //   : console.log(userMatch);
+  //     res.status(201).send({ userMatch });
+  res.send({ id });
   //update user's last active date to now
-  io.emit("user_disconnect", JSON.stringify(userMatch));
+  io.emit("user_disconnect", JSON.stringify(id));
 });
 
 app.put("/api/logout/:id", async (req, res) => {
