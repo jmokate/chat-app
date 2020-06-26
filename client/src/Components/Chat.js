@@ -44,7 +44,7 @@ class Chat extends React.Component {
     this.setState({
       currentUser: userStorage
     });
-
+    this.getAllUsers();
     window.setInterval(this.getAllUsers, 600000);
     this.getAllMessages();
 
@@ -126,7 +126,7 @@ class Chat extends React.Component {
       .get(usersUrl)
       .then(response => {
         const users = response.data;
-        const currentUser = this.state.currentUser;
+        // const currentUser = this.state.currentUser;
 
         this.setState({
           usersOnline: users

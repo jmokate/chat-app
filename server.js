@@ -67,6 +67,7 @@ app.post("/api/messages", async (req, res) => {
 app.get("/api/users", async (req, res) => {
   if (req.query.active === "true") {
     const users = await dataAccess.queryActiveUsers();
+    console.log("active users returned from db are ", users);
     res.send(users);
   } else {
     const users = await dataAccess.queryUsers();
