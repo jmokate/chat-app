@@ -3,12 +3,16 @@ import "../index.css";
 import moment from "moment";
 
 function Message(props) {
+  let userNameCopy = (" " + props.userName).slice(1);
   return (
     <div className='messages'>
       <div className='messageUserName'>
         <span className={props.className}>
-          {props.userName.toUpperCase()}
-          <span className='moment'>{moment(props.createdDate).calendar()}</span>
+          {userNameCopy.toUpperCase()}
+          <span className='moment'>
+            {" "}
+            {moment(props.createdDate).calendar()}
+          </span>
         </span>
       </div>
       <span className='chat-font'>{props.text}</span>

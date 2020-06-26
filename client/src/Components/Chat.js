@@ -45,7 +45,7 @@ class Chat extends React.Component {
       currentUser: userStorage
     });
 
-    this.getAllUsers();
+    window.setInterval(this.getAllUsers, 600000);
     this.getAllMessages();
 
     // socket CONNECTION listener
@@ -106,6 +106,7 @@ class Chat extends React.Component {
     socket.on("chat_message", chatMsg => {
       // console.log("chat message is: " + chatMsg);
       const parsedMsg = JSON.parse(chatMsg);
+      console.log("the parsed user message is ", parsedMsg);
 
       this.setState({
         messagesInDataBase: [...this.state.messagesInDataBase, parsedMsg]
@@ -119,6 +120,7 @@ class Chat extends React.Component {
   }
 
   getAllUsers = async () => {
+    console.log("getting all users");
     const usersUrl = `/api/users?active=true`;
     await axios
       .get(usersUrl)
@@ -132,6 +134,7 @@ class Chat extends React.Component {
         console.log(users);
       })
       .catch(err => console.log(err));
+    // setInterval(this.getAllUsers, 10000);
   };
 
   getAllMessages = async () => {
@@ -183,7 +186,7 @@ class Chat extends React.Component {
 
     await axios
       .post(url, newMessage)
-      .then(response => console.log(response))
+      .then(response => console.log(response.data))
       .catch(err => console.log(err));
   };
 
@@ -260,7 +263,7 @@ class Chat extends React.Component {
       return user.id == currentId ? null : (
         <Users
           key={user.id}
-          userName={user.username.toUpperCase()}
+          userName={user.username}
           className={"users-online"}
         />
       );

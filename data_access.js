@@ -40,7 +40,7 @@ queryActiveUsers = async () => {
   try {
     console.log("connected to users in database");
     const results = await client.query(
-      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '30 minutes';"
+      "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes';"
     );
     // const results = await client.query(
     //   "SELECT * FROM users WHERE is_logged_in = true"
@@ -162,8 +162,8 @@ putLogoutUser = async id => {
 createMessage = async (userId, text, createdDate) => {
   try {
     await client.query("BEGIN");
-    await client.query(
-      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id, created_date",
+    const result = await client.query(
+      "INSERT INTO messages(user_id, text) VALUES($1, $2) RETURNING id, created_date, user_id, text",
       [userId, text]
     );
     // const createdDate = await client.query(
@@ -174,7 +174,8 @@ createMessage = async (userId, text, createdDate) => {
     );
     // const result = await client.query("SELECT created_date FROM messages WHERE id = 105;")
     await client.query("COMMIT");
-    // console.table(createdDate.rows[0]);
+    console.table(result.rows[0]);
+    return result.rows[0];
     // console.log(`new message by ${userId} that says ${text}`);
   } catch (err) {
     console.log(`there was an error with ${(userId, text)}`);

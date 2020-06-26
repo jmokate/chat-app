@@ -49,11 +49,18 @@ app.post("/api/messages", async (req, res) => {
   const newMessageText = req.body.text;
   // const newMessageCreated = null;
 
-  dataAccess.createMessage(newMessageUserId, newMessageText);
+  returnedMessage = await dataAccess.createMessage(
+    newMessageUserId,
+    newMessageText
+  );
+
+  returnedMessage.username = newMessage.username;
+
+  console.log(returnedMessage);
 
   //update the user and set last_active_at to NOW
-  io.emit("chat_message", JSON.stringify(newMessage));
-  console.log(newMessage);
+  io.emit("chat_message", JSON.stringify(returnedMessage));
+  console.log(returnedMessage);
 });
 
 //GET all users
