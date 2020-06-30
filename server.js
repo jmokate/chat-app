@@ -34,7 +34,6 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/api/messages", async (req, res) => {
   const messages = await dataAccess.queryAllMessages();
   res.send(messages);
-  // console.log(messages);
 });
 
 //POST messagesy
@@ -71,10 +70,6 @@ app.get("/api/users", async (req, res) => {
     res.send(users);
   } else {
     const users = await dataAccess.queryUsers();
-
-    // let users = messages.map(message => {
-    //   return message.user;
-    // });
 
     res.send(users);
   }
@@ -128,19 +123,18 @@ app.post("/api/logout", async (req, res) => {
   io.emit("user_disconnect", JSON.stringify(id));
 });
 
-app.put("/api/logout/:id", async (req, res) => {
-  console.log("put request route hit");
-  let id = req.params.id;
+// app.put("/api/logout/:id", async (req, res) => {
+//   console.log("put request route hit");
+//   let id = req.params.id;
 
-  putUserLogout = await dataAccess.putLogoutUser(id);
+//   putUserLogout = await dataAccess.putLogoutUser(id);
 
-  console.log("id in PUT is ", id);
+//   console.log("id in PUT is ", id);
 
-  io.emit("browser_disconnect", id);
-});
+//   io.emit("browser_disconnect", id);
+// });
 
 app.get("/*", async (req, res) => {
-  //res.send("hiya");
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
