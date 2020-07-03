@@ -43,10 +43,9 @@ app.post("/api/messages", async (req, res) => {
     username: req.body.username,
     text: req.body.text
   };
-  // console.log(req.body);
+
   const newMessageUserId = req.body.id;
   const newMessageText = req.body.text;
-  // const newMessageCreated = null;
 
   returnedMessage = await dataAccess.createMessage(
     newMessageUserId,
@@ -57,7 +56,6 @@ app.post("/api/messages", async (req, res) => {
 
   console.log(returnedMessage);
 
-  //update the user and set last_active_at to NOW
   io.emit("chat_message", JSON.stringify(returnedMessage));
   console.log(returnedMessage);
 });
@@ -66,11 +64,9 @@ app.post("/api/messages", async (req, res) => {
 app.get("/api/users", async (req, res) => {
   if (req.query.active === "true") {
     const users = await dataAccess.queryActiveUsers();
-    // console.log("active users returned from db are ", users);
     res.send(users);
   } else {
     const users = await dataAccess.queryUsers();
-
     res.send(users);
   }
 });
@@ -109,17 +105,17 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/logout", async (req, res) => {
   const id = req.body.id;
-
+  let logOutName = req.body.userName;
   console.log("the req body info on user is ", id);
-  // const userMatch = await dataAccess.logOutUser(logOutName);
+  const userMatch = await dataAccess.logOutUser(logOutName);
 
-  // !userMatch
-  //   ? res.status(401).json({
-  //       message: "there was an issue logging out"
-  //     })
-  //   : //   : console.log(userMatch);
-  //     res.status(201).send({ userMatch });
-  res.send({ id });
+  !userMatch
+    ? res.status(401).json({
+        message: "there was an issue logging out"
+      })
+    : //   : console.log(userMatch);
+      res.status(201).send({ userMatch });
+  // res.send({ id });
   //update user's last active date to now
   io.emit("user_disconnect", JSON.stringify(id));
 });

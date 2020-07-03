@@ -59,7 +59,7 @@ class Register extends React.Component {
       );
     } else {
       const newUser = {
-        userName: userName,
+        userName: userName.toLowerCase(),
         password: password
       };
       console.log(newUser);
