@@ -66,7 +66,7 @@ app.post("/api/messages", async (req, res) => {
 app.get("/api/users", async (req, res) => {
   if (req.query.active === "true") {
     const users = await dataAccess.queryActiveUsers();
-    console.log("active users returned from db are ", users);
+    // console.log("active users returned from db are ", users);
     res.send(users);
   } else {
     const users = await dataAccess.queryUsers();
@@ -92,14 +92,15 @@ app.post("/api/users", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   const loginName = req.body.userName;
   const password = req.body.password;
-  console.log(loginName);
-  const userMatch = await dataAccess.loginUser(loginName, password);
-  // console.log("the user match returns as ", userMatch);
-  !userMatch
+  // console.log(loginName);
+  let userMatch = await dataAccess.loginUser(loginName, password);
+  console.log("the user match returns as ", userMatch);
+  !userMatch.isSuccessful
     ? res.status(401).json({
-        message: "sorry, incorrect username or password"
+        message: userMatch.errorMessage
       })
-    : console.log(userMatch);
+    : (userMatch = userMatch.user);
+  console.log("filtered user match is this ", userMatch);
   res.status(201).send({ userMatch });
   //update user's last active date to now
 

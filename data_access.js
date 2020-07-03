@@ -59,7 +59,7 @@ createUser = async (username, password) => {
     );
     console.log(`new row inserted with value of ${username}`);
     await client.query("COMMIT");
-    console.table(results.rows[0].id);
+    // console.table(results.rows[0].id);
     return results.rows[0].id;
 
     // Store hash in your password DB.
@@ -77,7 +77,7 @@ queryAllMessages = async () => {
     const results = await client.query(
       "SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
     );
-    console.table(results.rows[0]);
+    // console.table(results.rows[0]);
     return results.rows;
   } catch (err) {
     console.log(`something went wrong ${err}`);
@@ -96,15 +96,35 @@ loginUser = async (name, password) => {
     );
     saltedPassword = results.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, saltedPassword);
-    // console.table(results.rows[0]);
-    if (passwordMatch) {
+    console.log("logging in results ", results.rows[0].is_logged_in);
+
+    if (results.rows[0].is_logged_in == true) {
+      return {
+        isSuccessful: false,
+        errorMessage: "This user is already logged in"
+      };
+    }
+
+    if (!passwordMatch) {
+      return {
+        isSuccessful: false,
+        errorMessage: "Incorrect password"
+      };
+    } else {
       await client.query(
         `UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
       );
+      await client.query(
+        `UPDATE users SET is_logged_in = true WHERE username = '${name}'`
+      );
       await client.query("COMMIT");
-      return results.rows[0];
     }
-    // return false;
+    let successfulLogin = {
+      isSuccessful: true,
+      errorMessage: null,
+      user: results.rows[0]
+    };
+    return successfulLogin;
   } catch (err) {
     console.log(`something is not right with the id ${name}`);
     return false;
@@ -158,7 +178,7 @@ createMessage = async (userId, text, createdDate) => {
       `UPDATE users SET last_active_at = NOW() WHERE id = '${userId}'`
     );
     await client.query("COMMIT");
-    console.table(result.rows[0]);
+    // console.table(result.rows[0]);
     return result.rows[0];
   } catch (err) {
     console.log(`there was an error with ${(userId, text)}`);
