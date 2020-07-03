@@ -61,7 +61,6 @@ class Login extends React.Component {
   loginUser = async user => {
     const { history } = this.props;
     const { userName } = this.state;
-    //console.log(user.userName);
 
     await axios
       .post(`/api/login`, user)

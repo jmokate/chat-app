@@ -1,3 +1,4 @@
+const moment = require("moment");
 require("dotenv").config();
 const PASS = process.env.POSTGRES;
 const bcrypt = require("bcrypt");
@@ -36,11 +37,22 @@ queryUsers = async () => {
 
 //get all users that are ONLINE
 queryActiveUsers = async () => {
+  let activeCheck = moment().format();
+  console.log("the activeCheck is ", activeCheck);
   try {
     console.log("connected to users in database");
     const results = await client.query(
       "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
     );
+
+    // if (results.rows[0].last_active_at <= activeCheck) {
+    //   await client.query(
+    //     "SELECT * FROM users WHERE last_active_at < NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
+    //   );
+    //   await client.query(
+    //     "UPDATE users SET is_logged_in = false WHERE is_logged_in = true;"
+    //   );
+    // }
     return results.rows;
   } catch (err) {
     console.log(`something is not right ${err}`);
@@ -144,23 +156,22 @@ logOutUser = async name => {
   }
 };
 
-// putLogoutUser = async id => {
-//   try {
-//     await client.query("BEGIN");
-//     const results = await client.query(
-//       `SELECT * FROM users WHERE id = '${id}'`
-//     );
-//     await client.query(
-//       `UPDATE users SET is_logged_in = false WHERE id = '${id}'`
-//     );
-//     await client.query("COMMIT");
-//     console.table(results.rows[0]);
-//     // return results.rows[0];
-//   } catch (err) {
-//     console.log("there is a problem with logging out the user");
-//     return false;
-//   }
-// };
+putLogoutUser = async id => {
+  try {
+    await client.query("BEGIN");
+    const results = await client.query(
+      `SELECT * FROM users WHERE id = '${id}'`
+    );
+    await client.query(
+      `UPDATE users SET is_logged_in = false WHERE id = '${id}'`
+    );
+    await client.query("COMMIT");
+    // console.table(results.rows[0]);
+  } catch (err) {
+    console.log("there is a problem with logging out the user");
+    return false;
+  }
+};
 
 //create a message in the db
 createMessage = async (userId, text, createdDate) => {
@@ -188,6 +199,7 @@ module.exports = {
   queryAllMessages,
   loginUser,
   logOutUser,
+  putLogoutUser,
   createMessage,
   createUser
 };

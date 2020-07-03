@@ -56,10 +56,8 @@ class Chat extends React.Component {
 
     // socker USER LOGIN listener
     socket.on("user_online", userOnline => {
-      // console.log(userOnline);
       console.log("a new user has logged on through sockets");
       const parsedUserOnline = JSON.parse(userOnline);
-      // console.log(parsedUserOnline);
 
       this.setState(
         {
@@ -69,17 +67,17 @@ class Chat extends React.Component {
       );
     });
 
-    socket.on("browser_disconnect", id => {
-      console.log("brower disconnect");
-      // this.setState(prevState => ({
-      //   usersOnline: prevState.usersOnline.filter(
-      //     person => {
-      //       return person.id !== id;
-      //     },
-      //     () => console.log(this.state.usersOnline)
-      //   )
-      // }));
-    });
+    // socket.on("browser_disconnect", id => {
+    //   console.log("brower disconnect");
+    //   // this.setState(prevState => ({
+    //   //   usersOnline: prevState.usersOnline.filter(
+    //   //     person => {
+    //   //       return person.id !== id;
+    //   //     },
+    //   //     () => console.log(this.state.usersOnline)
+    //   //   )
+    //   // }));
+    // });
 
     socket.on("user_disconnect", userDisconnect => {
       console.log("a user has left the chat");
@@ -104,7 +102,6 @@ class Chat extends React.Component {
 
     // socket MESSAGE listener
     socket.on("chat_message", chatMsg => {
-      // console.log("chat message is: " + chatMsg);
       const parsedMsg = JSON.parse(chatMsg);
       console.log("the parsed user message is ", parsedMsg);
 
@@ -126,7 +123,6 @@ class Chat extends React.Component {
       .get(usersUrl)
       .then(response => {
         const users = response.data;
-        // const currentUser = this.state.currentUser;
 
         this.setState({
           usersOnline: users
@@ -134,7 +130,6 @@ class Chat extends React.Component {
         console.log(users);
       })
       .catch(err => console.log(err));
-    // setInterval(this.getAllUsers, 10000);
   };
 
   getAllMessages = async () => {

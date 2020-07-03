@@ -88,7 +88,6 @@ app.post("/api/users", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   const loginName = req.body.userName;
   const password = req.body.password;
-  // console.log(loginName);
   let userMatch = await dataAccess.loginUser(loginName, password);
   console.log("the user match returns as ", userMatch);
   !userMatch.isSuccessful
@@ -98,8 +97,6 @@ app.post("/api/login", async (req, res) => {
     : (userMatch = userMatch.user);
   console.log("filtered user match is this ", userMatch);
   res.status(201).send({ userMatch });
-  //update user's last active date to now
-
   io.emit("user_online", JSON.stringify(userMatch));
 });
 
@@ -113,23 +110,20 @@ app.post("/api/logout", async (req, res) => {
     ? res.status(401).json({
         message: "there was an issue logging out"
       })
-    : //   : console.log(userMatch);
-      res.status(201).send({ userMatch });
-  // res.send({ id });
-  //update user's last active date to now
+    : res.status(201).send({ userMatch });
   io.emit("user_disconnect", JSON.stringify(id));
 });
 
-// app.put("/api/logout/:id", async (req, res) => {
-//   console.log("put request route hit");
-//   let id = req.params.id;
+app.put("/api/logout/:id", async (req, res) => {
+  // console.log("put request route hit");
+  const id = req.params.id;
 
-//   putUserLogout = await dataAccess.putLogoutUser(id);
+  putUserLogout = await dataAccess.putLogoutUser(id);
 
-//   console.log("id in PUT is ", id);
+  // console.log("id in PUT is ", id);
 
-//   io.emit("browser_disconnect", id);
-// });
+  io.emit("user_disconnect", JSON.stringify(id));
+});
 
 app.get("/*", async (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
