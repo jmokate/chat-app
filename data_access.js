@@ -37,22 +37,40 @@ queryUsers = async () => {
 
 //get all users that are ONLINE
 queryActiveUsers = async () => {
-  let activeCheck = moment().format();
-  console.log("the activeCheck is ", activeCheck);
+  let isActive = moment().format();
+  let activeCheck = moment()
+    .subtract(1, "minutes")
+    .format();
+  console.log(
+    "the activeCheck is ",
+    moment(activeCheck).format("YYYY-MM-DD HH:mm:ss")
+  );
+  console.log("the isActive check is ", isActive);
   try {
     console.log("connected to users in database");
+    await client.query("SELECT * FROM users WHERE is_logged_in = true;");
+    await client.query(
+      "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '2 minutes';"
+    );
     const results = await client.query(
       "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
     );
-
-    // if (results.rows[0].last_active_at <= activeCheck) {
+    //CHECK HERE. WORKED ON THIS LAST TIME. CHECKING IF USER IS INACTIVE FOR 20 MIN BUT LOGGED IN, AUTO LOGGED OUT
+    // console.log(
+    //   "result from query is ",
+    //   moment(results.rows[0].last_active_at).format("YYYY-MM-DD HH:mm:ss")
+    // );
+    // let lastActiveInPostgres = moment(results.rows[0].last_active_at).format(
+    //   "YYYY-MM-DD HH:mm:ss"
+    // );
+    // if (lastActiveInPostgres <= activeCheck) {
     //   await client.query(
-    //     "SELECT * FROM users WHERE last_active_at < NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
+    //     "SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '2 minutes' AND is_logged_in = true;"
     //   );
     //   await client.query(
     //     "UPDATE users SET is_logged_in = false WHERE is_logged_in = true;"
     //   );
-    // }
+    // } else
     return results.rows;
   } catch (err) {
     console.log(`something is not right ${err}`);
