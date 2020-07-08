@@ -28,6 +28,7 @@ class Chat extends React.Component {
       users: [],
       currentUser: {},
       usersOnline: [],
+      usersOffline: [],
       endpoint: "http://localhost:5000"
     };
     socket = io(this.state.endpoint);
@@ -41,11 +42,15 @@ class Chat extends React.Component {
     }
     const userStorage = JSON.parse(localStorage.getItem("user"));
 
-    this.setState({
-      currentUser: userStorage
-    });
+    this.setState(
+      {
+        currentUser: userStorage
+      },
+      () => console.log(this.state.currentUser)
+    );
     this.getAllUsers();
     window.setInterval(this.getAllUsers, 600000);
+    // this.getOfflineUsers();
     this.getAllMessages();
 
     // socket CONNECTION listener
@@ -130,6 +135,50 @@ class Chat extends React.Component {
         console.log(users);
       })
       .catch(err => console.log(err));
+    this.getOfflineUsers();
+  };
+
+  getOfflineUsers = async () => {
+    console.log("getting offline users");
+    const usersUrl = `/api/users`;
+    await axios
+      .get(usersUrl)
+      .then(response => {
+        const users = response.data;
+
+        this.setState({
+          usersOffline: users
+        });
+        console.log("list of offline users ", users);
+      })
+      .catch(err => console.log(err));
+    this.checkUserActivity();
+  };
+
+  checkUserActivity = async () => {
+    console.log("initiating check user activity");
+    const { currentUser, usersOffline } = this.state;
+    console.log("current user is ", currentUser);
+
+    for (let i = 0; i < usersOffline.length; i++) {
+      let users = usersOffline[i];
+      if (users.id == currentUser.id) {
+        console.log("match");
+        this.handleLogout();
+      }
+    }
+
+    // usersOffline.forEach(user => {
+    //   if (user.id == currentUser.id) {
+    //     this.handleLogout();
+    //   }
+    //   return false;
+    // });
+
+    // await usersOnline.forEach(user => {
+    //   user.id == null;
+    //   this.handleLogout();
+    // });
   };
 
   getAllMessages = async () => {

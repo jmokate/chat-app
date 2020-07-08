@@ -27,7 +27,9 @@ connectToDb = async () => {
 queryUsers = async () => {
   try {
     console.log("connected to users in database");
-    const results = await client.query("SELECT * FROM users");
+    const results = await client.query(
+      "SELECT * FROM users WHERE is_logged_in = false;"
+    );
     return results.rows;
   } catch (err) {
     console.log(`something is not right ${err}`);
