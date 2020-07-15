@@ -16,12 +16,7 @@ require("dotenv").config();
 io.on("connection", socket => {
   console.log("client is connected");
 
-  socket.emit("new_message", "you made it to socketville!");
-
-  socket.on("disconnect", () => {
-    io.emit("disconnect", "user closed a browser and it getting logged out");
-    console.log("client has disconnected");
-  });
+  socket.emit("new_message", "sockets connected");
 });
 
 app.use(express.static(path.join(__dirname, "client/build")));
@@ -71,7 +66,7 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-//CREATE a user (CREATE user)
+//CREATE a user
 app.post("/api/users", async (req, res) => {
   const newUser = req.body.userName;
   const password = req.body.password;
@@ -115,12 +110,9 @@ app.post("/api/logout", async (req, res) => {
 });
 
 app.put("/api/logout/:id", async (req, res) => {
-  // console.log("put request route hit");
   const id = req.params.id;
 
   putUserLogout = await dataAccess.putLogoutUser(id);
-
-  // console.log("id in PUT is ", id);
 
   io.emit("user_disconnect", JSON.stringify(id));
 });

@@ -15,8 +15,7 @@ import axios from "axios";
 class Register extends React.Component {
   state = {
     userName: "",
-    password: "",
-    isRegistered: false
+    password: ""
   };
 
   componentDidMount() {
@@ -78,11 +77,6 @@ class Register extends React.Component {
       .post("/api/users", user)
       .then(response => {
         if (response.status == 201) {
-          console.log("yay user created");
-
-          this.setState({
-            isRegistered: true
-          });
           const newUser = {
             userName: userName,
             id: response.data.newUserId
@@ -97,11 +91,6 @@ class Register extends React.Component {
         alert(error.response.data.message);
         console.log(error.message);
       });
-
-    // console.log(this.state.isRegistered);
-    //   if (isRegistered == true) {
-    //     history.push("/login");
-    //   }
   };
 
   render() {

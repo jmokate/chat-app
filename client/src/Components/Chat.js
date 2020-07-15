@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Message from "./Message";
 import Users from "./Users";
 import {
@@ -8,8 +8,7 @@ import {
   InputGroup,
   Button,
   Form,
-  FormControl,
-  Table
+  FormControl
 } from "react-bootstrap";
 import "../index.css";
 import axios from "axios";
@@ -22,7 +21,6 @@ class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayMessage: false,
       text: "",
       messagesInDataBase: [],
       users: [],
@@ -50,65 +48,34 @@ class Chat extends React.Component {
     );
     this.getAllUsers();
     window.setInterval(this.getAllUsers, 600000);
-    // this.getOfflineUsers();
     this.getAllMessages();
 
     // socket CONNECTION listener
     socket.on("new_message", msg => {
       console.log("connection to socket message: " + msg);
     });
-    console.log("component mounting");
 
     // socker USER LOGIN listener
     socket.on("user_online", userOnline => {
-      console.log("a new user has logged on through sockets");
       const parsedUserOnline = JSON.parse(userOnline);
 
-      this.setState(
-        {
-          usersOnline: [...this.state.usersOnline, parsedUserOnline]
-        },
-        () => console.log(this.state.usersOnline)
-      );
+      this.setState({
+        usersOnline: [...this.state.usersOnline, parsedUserOnline]
+      });
     });
-
-    // socket.on("browser_disconnect", id => {
-    //   console.log("brower disconnect");
-    //   // this.setState(prevState => ({
-    //   //   usersOnline: prevState.usersOnline.filter(
-    //   //     person => {
-    //   //       return person.id !== id;
-    //   //     },
-    //   //     () => console.log(this.state.usersOnline)
-    //   //   )
-    //   // }));
-    // });
 
     socket.on("user_disconnect", userDisconnect => {
-      console.log("a user has left the chat");
       const parsedUserDisconnectId = JSON.parse(userDisconnect);
-      console.log(parsedUserDisconnectId);
-
       this.setState(prevState => ({
-        usersOnline: prevState.usersOnline.filter(
-          person => {
-            return person.id !== parsedUserDisconnectId;
-          },
-          () => console.log(this.state.usersOnline)
-        )
+        usersOnline: prevState.usersOnline.filter(person => {
+          return person.id !== parsedUserDisconnectId;
+        })
       }));
-    });
-
-    console.log("chat rendering");
-
-    socket.on("disconnect", message => {
-      console.log(message);
     });
 
     // socket MESSAGE listener
     socket.on("chat_message", chatMsg => {
       const parsedMsg = JSON.parse(chatMsg);
-      console.log("the parsed user message is ", parsedMsg);
 
       this.setState({
         messagesInDataBase: [...this.state.messagesInDataBase, parsedMsg]
@@ -122,7 +89,6 @@ class Chat extends React.Component {
   }
 
   getAllUsers = async () => {
-    console.log("getting all users");
     const usersUrl = `/api/users?active=true`;
     await axios
       .get(usersUrl)
@@ -132,14 +98,12 @@ class Chat extends React.Component {
         this.setState({
           usersOnline: users
         });
-        console.log(users);
       })
       .catch(err => console.log(err));
     this.getOfflineUsers();
   };
 
   getOfflineUsers = async () => {
-    console.log("getting offline users");
     const usersUrl = `/api/users`;
     await axios
       .get(usersUrl)
@@ -149,36 +113,20 @@ class Chat extends React.Component {
         this.setState({
           usersOffline: users
         });
-        console.log("list of offline users ", users);
       })
       .catch(err => console.log(err));
     this.checkUserActivity();
   };
 
   checkUserActivity = async () => {
-    console.log("initiating check user activity");
     const { currentUser, usersOffline } = this.state;
-    console.log("current user is ", currentUser);
 
     for (let i = 0; i < usersOffline.length; i++) {
       let users = usersOffline[i];
       if (users.id == currentUser.id) {
-        console.log("match");
         this.handleLogout();
       }
     }
-
-    // usersOffline.forEach(user => {
-    //   if (user.id == currentUser.id) {
-    //     this.handleLogout();
-    //   }
-    //   return false;
-    // });
-
-    // await usersOnline.forEach(user => {
-    //   user.id == null;
-    //   this.handleLogout();
-    // });
   };
 
   getAllMessages = async () => {
@@ -190,20 +138,16 @@ class Chat extends React.Component {
         this.setState({
           messagesInDataBase: messages
         });
-        console.log(messages);
       })
       .catch(err => console.log(err));
   };
 
-  handleChange = async event => {
+  handleMessageInputChange = async event => {
     this.setState({ text: event.target.value });
   };
 
-  handleSubmit = async () => {
-    if (!this.state.text) {
-      return null;
-    }
-    if (this.state.text.trim() == "") {
+  handleMessageSubmit = async () => {
+    if (!this.state.text || this.state.text.trim() == "") {
       return null;
     }
 
@@ -215,17 +159,10 @@ class Chat extends React.Component {
 
     this.submitMessageToDataBase(newMessage);
 
-    this.setState({
-      displayMessage: true
-    });
-
     this.setState({ text: "" });
   };
 
   submitMessageToDataBase = async newMessage => {
-    const text = newMessage.text;
-
-    // console.log(text);
     const url = "/api/messages";
 
     await axios
@@ -239,7 +176,7 @@ class Chat extends React.Component {
       if (!this.state.text) {
         event.preventDefault();
       } else if (this.state.text) {
-        this.handleSubmit();
+        this.handleMessageSubmit();
         event.preventDefault();
       }
       if (event.shiftKey && event.key === 13) {
@@ -251,23 +188,18 @@ class Chat extends React.Component {
 
   handleLogout = async () => {
     const { history } = this.props;
-
-    const url = "/api/logout";
     const { currentUser } = this.state;
+    const url = "/api/logout";
 
-    console.log(currentUser);
     await axios
       .post(url, currentUser)
       .then(response => console.log(response))
       .catch(err => console.log(err));
 
     this.setState(prevState => ({
-      usersOnline: prevState.usersOnline.filter(
-        person => {
-          return person.id !== currentUser.id;
-        },
-        () => console.log(this.state.usersOnline)
-      )
+      usersOnline: prevState.usersOnline.filter(person => {
+        return person.id !== currentUser.id;
+      })
     }));
 
     localStorage.removeItem("user");
@@ -276,8 +208,8 @@ class Chat extends React.Component {
 
   render() {
     const messages = this.state.messagesInDataBase;
-
     let currentId;
+
     if (this.state.currentUser) {
       currentId = this.state.currentUser.id;
     }
@@ -354,7 +286,7 @@ class Chat extends React.Component {
               <p>Logout</p>
             </Col>
             <Col xs={8} md={8}>
-              <Form onSubmit={this.handleSubmit}>
+              <Form onSubmit={this.handleMessageSubmit}>
                 <InputGroup>
                   <FormControl
                     id='msgForm'
@@ -362,11 +294,11 @@ class Chat extends React.Component {
                     placeholder='you gonna let em talk to you like that?'
                     className='text-input'
                     value={this.state.text}
-                    onChange={this.handleChange}
+                    onChange={this.handleMessageInputChange}
                     onKeyPress={this.handleKeyPress}
                   />
                   <InputGroup.Append>
-                    <Button className='btn' onClick={this.handleSubmit}>
+                    <Button className='btn' onClick={this.handleMessageSubmit}>
                       get 'em!
                     </Button>
                   </InputGroup.Append>
