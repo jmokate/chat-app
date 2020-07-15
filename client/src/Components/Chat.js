@@ -207,14 +207,14 @@ class Chat extends React.Component {
   };
 
   render() {
-    const messages = this.state.messagesInDataBase;
+    const { messagesInDataBase } = this.state;
     let currentId;
 
     if (this.state.currentUser) {
       currentId = this.state.currentUser.id;
     }
 
-    let renderMessage = messages.map(message => {
+    const renderMessage = messagesInDataBase.map(message => {
       return message.user_id == currentId ? (
         <Message
           key={message.id}
@@ -233,9 +233,10 @@ class Chat extends React.Component {
         />
       );
     });
-    const users = this.state.usersOnline;
 
-    let renderUsers = users.map(user => {
+    const { usersOnline } = this.state;
+
+    const renderUsers = usersOnline.map(user => {
       return user.id == currentId ? null : (
         <Users
           key={user.id}
@@ -244,6 +245,7 @@ class Chat extends React.Component {
         />
       );
     });
+
     const { currentUser } = this.state;
     renderUsers.push(
       <Users

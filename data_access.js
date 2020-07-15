@@ -19,28 +19,24 @@ connectToDb = async () => {
     await client.connect();
     console.log("connected to chat_app database");
   } catch (err) {
-    console.log("something wrong happened" + err);
+    console.log("Not connected to DB" + err);
   }
 };
 
-//get all users from db
-queryUsers = async () => {
+queryInactiveUsers = async () => {
   try {
-    console.log("connected to users in database");
     const results = await client.query(
       "SELECT * FROM users WHERE is_logged_in = false;"
     );
     return results.rows;
   } catch (err) {
-    console.log(`something is not right ${err}`);
+    console.log(`Users not queried ${err}`);
     return [];
   }
 };
 
-//get all users that are ONLINE
 queryActiveUsers = async () => {
   try {
-    console.log("connected to users in database");
     await client.query("SELECT * FROM users WHERE is_logged_in = true;");
     await client.query(
       "UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '20 minutes';"
@@ -50,12 +46,11 @@ queryActiveUsers = async () => {
     );
     return results.rows;
   } catch (err) {
-    console.log(`something is not right ${err}`);
+    console.log(`Active users not queried ${err}`);
     return [];
   }
 };
 
-//create a user in db
 createUser = async (username, password) => {
   try {
     const hash = await bcrypt.hashSync(password, saltRounds);
@@ -64,42 +59,36 @@ createUser = async (username, password) => {
       "INSERT INTO users(username, password) VALUES($1, $2) RETURNING id",
       [username, hash]
     );
-    console.log(`new row inserted with value of ${username}`);
+
     await client.query("COMMIT");
     return results.rows[0].id;
   } catch (err) {
-    console.log(`there was a problem posting a user ${err}`);
+    console.log(`User not created ${err}`);
     await client.query("ROLLBACK");
     return false;
   }
 };
 
-// get all messages from db
 queryAllMessages = async () => {
   try {
-    console.log("connected to messages in database");
     const results = await client.query(
       "SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
     );
     return results.rows;
   } catch (err) {
-    console.log(`something went wrong ${err}`);
+    console.log(`Messages not queried ${err}`);
     return [];
   }
 };
-// get a message by id in db
 
 loginUser = async (name, password) => {
   try {
-    console.log(name);
-    console.log("getting a message by id in messages");
     await client.query("BEGIN");
     const results = await client.query(
       `SELECT * FROM users WHERE username = '${name}';`
     );
-    saltedPassword = results.rows[0].password;
+    const saltedPassword = results.rows[0].password;
     const passwordMatch = await bcrypt.compare(password, saltedPassword);
-    console.log("logging in results ", results.rows[0].is_logged_in);
 
     if (results.rows[0].is_logged_in == true) {
       return {
@@ -129,7 +118,7 @@ loginUser = async (name, password) => {
     };
     return successfulLogin;
   } catch (err) {
-    console.log(`something is not right with the id ${name}`);
+    console.log(`User not logged in ${err}`);
     return {
       isSuccessful: false,
       errorMessage: "Could not locate this username. Please register."
@@ -149,7 +138,7 @@ logOutUser = async name => {
     await client.query("COMMIT");
     return results.rows[0];
   } catch (err) {
-    console.log("there is a problem with logging out the user");
+    console.log(`Could not logout user ${err}`);
     return false;
   }
 };
@@ -163,7 +152,7 @@ putLogoutUser = async id => {
     );
     await client.query("COMMIT");
   } catch (err) {
-    console.log("there is a problem with logging out the user");
+    console.log(`Could not logout user ${err}`);
     return false;
   }
 };
@@ -182,14 +171,14 @@ createMessage = async (userId, text, createdDate) => {
     await client.query("COMMIT");
     return result.rows[0];
   } catch (err) {
-    console.log(`there was an error with ${(userId, text)}`);
+    console.log(`could not create message ${err}`);
     await client.query("ROLLBACK");
   }
 };
 
 module.exports = {
   connectToDb,
-  queryUsers,
+  queryInactiveUsers,
   queryActiveUsers,
   queryAllMessages,
   loginUser,
