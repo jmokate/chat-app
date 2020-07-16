@@ -1,8 +1,3 @@
-/* html {
-  max-width: 100%;
-  max-height: 100%;
-  background: #444;
-} */
 @import url("https://fonts.googleapis.com/css?family=Cedarville+Cursive&display=swap");
 
 html,
@@ -15,7 +10,6 @@ body {
 }
 
 .title {
-  /* background-image: linear-gradient(to bottom right, #3a6186, #89253e); */
   height: 10em;
 }
 
@@ -27,11 +21,8 @@ body {
 }
 
 .main-outline {
-  /* margin-top: 10em; */
   height: 38em;
   border-radius: 5px;
-
-  /* background-image: linear-gradient(to bottom right, #3a6186, #89253e); */
 }
 
 .users-box {
