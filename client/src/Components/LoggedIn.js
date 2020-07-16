@@ -1,22 +1,14 @@
 import React from "react";
-import { Container, Form, Button, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Button, Row } from "react-bootstrap";
 import axios from "axios";
 
 class LoggedIn extends React.Component {
-  state = {
-    isLoggedIn: false
-  };
-
   componentDidMount() {
     const { history } = this.props;
-    console.log("mount");
     const checkStorage = localStorage.getItem("user");
-    if (checkStorage) {
-      this.setState({ isLoggedIn: true });
-    } else if (!checkStorage) {
+
+    if (!checkStorage) {
       history.push("/login");
-      console.log("pushed");
     }
   }
 
@@ -27,7 +19,6 @@ class LoggedIn extends React.Component {
 
   handleLogOut = () => {
     const { history } = this.props;
-
     const currentUser = JSON.parse(localStorage.getItem("user"));
     const id = currentUser.id;
 
@@ -43,7 +34,11 @@ class LoggedIn extends React.Component {
     const LoggedInUser = JSON.parse(localStorage.getItem("user"));
 
     return (
-      <Container fluid id='login-container' className='justify-content-center'>
+      <Container
+        fluid
+        id='loggedin-container'
+        className='justify-content-center'
+      >
         <Row className='justify-content-center'>
           <h3 className='mt-4'>You are signed in as:</h3>
           <h1>{LoggedInUser ? LoggedInUser.userName : null}</h1>

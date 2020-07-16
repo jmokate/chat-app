@@ -4,7 +4,6 @@ import Chat from "./Components/Chat";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import LoggedIn from "./Components/LoggedIn";
-import axios from "axios";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 

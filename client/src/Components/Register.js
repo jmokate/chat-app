@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Container,
-  Col,
-  Row,
-  InputGroup,
-  Button,
-  Form,
-  FormControl,
-  Table
-} from "react-bootstrap";
+import { Container, Row, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -27,24 +18,18 @@ class Register extends React.Component {
   }
 
   handleNameChange = e => {
-    this.setState(
-      {
-        userName: e.target.value
-      },
-      () => console.log(this.state.userName)
-    );
+    this.setState({
+      userName: e.target.value
+    });
   };
 
   handlePassChange = e => {
-    this.setState(
-      {
-        password: e.target.value
-      },
-      () => console.log(this.state.password)
-    );
+    this.setState({
+      password: e.target.value
+    });
   };
 
-  handleSubmit = e => {
+  handleSubmit = () => {
     const { userName, password } = this.state;
 
     if (
@@ -61,17 +46,19 @@ class Register extends React.Component {
         userName: userName.toLowerCase(),
         password: password
       };
-      console.log(newUser);
-
       this.registerUser(newUser);
+    }
+  };
+
+  handleKeyPress = e => {
+    if (e.key === "Enter") {
+      this.handleSubmit();
     }
   };
 
   registerUser = async user => {
     const { history } = this.props;
-    const { userName, password } = this.state;
-
-    console.log(user);
+    const { userName } = this.state;
 
     await axios
       .post("/api/users", user)
@@ -81,7 +68,6 @@ class Register extends React.Component {
             userName: userName,
             id: response.data.newUserId
           };
-          console.log(newUser);
 
           localStorage.setItem("user", JSON.stringify(newUser));
           history.push("/");
@@ -89,7 +75,6 @@ class Register extends React.Component {
       })
       .catch(error => {
         alert(error.response.data.message);
-        console.log(error.message);
       });
   };
 
@@ -115,6 +100,7 @@ class Register extends React.Component {
               onChange={this.handlePassChange}
               type='password'
               placeholder='create a password'
+              onKeyPress={this.handleKeyPress}
             />
           </Form.Group>
 

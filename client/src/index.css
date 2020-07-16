@@ -143,6 +143,14 @@ body {
   width: 20em;
 }
 
+#loggedin-container {
+  background: whitesmoke;
+  margin-top: 5em;
+  border-radius: 5px;
+  height: 18em;
+  width: 20em;
+}
+
 .link {
   text-decoration: none !important;
   display: inline !important;

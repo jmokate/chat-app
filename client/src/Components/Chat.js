@@ -40,12 +40,9 @@ class Chat extends React.Component {
     }
     const userStorage = JSON.parse(localStorage.getItem("user"));
 
-    this.setState(
-      {
-        currentUser: userStorage
-      },
-      () => console.log(this.state.currentUser)
-    );
+    this.setState({
+      currentUser: userStorage
+    });
     this.getAllUsers();
     window.setInterval(this.getAllUsers, 600000);
     this.getAllMessages();

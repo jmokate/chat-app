@@ -1,20 +1,12 @@
 import React from "react";
-import {
-  Container,
-  Col,
-  Row,
-  Button,
-  Form,
-  FormControl
-} from "react-bootstrap";
+import { Container, Row, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 class Login extends React.Component {
   state = {
     userName: "",
-    password: "",
-    isLoggedIn: false
+    password: ""
   };
 
   componentDidMount() {
@@ -37,7 +29,7 @@ class Login extends React.Component {
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = () => {
     const { userName, password } = this.state;
 
     if (
@@ -51,30 +43,30 @@ class Login extends React.Component {
       );
     } else {
       const newUser = {
-        userName: userName,
+        userName: userName.toLowerCase(),
         password: password
       };
       this.loginUser(newUser);
     }
   };
 
+  handleKeyPress = e => {
+    if (e.key === "Enter") {
+      this.handleSubmit();
+    }
+  };
+
   loginUser = async user => {
     const { history } = this.props;
-    const { userName } = this.state;
 
     await axios
       .post(`/api/login`, user)
       .then(response => {
-        console.log(response);
         if (response.status == 201) {
-          console.log("successful login!");
-          console.log(response.data);
-
           const userLogin = {
             userName: response.data.userMatch.username,
             id: response.data.userMatch.id
           };
-          console.log(userLogin);
 
           localStorage.setItem("user", JSON.stringify(userLogin));
           history.push("/");
@@ -108,6 +100,7 @@ class Login extends React.Component {
               onChange={this.handlePassChange}
               type='password'
               placeholder='enter your password'
+              onKeyPress={this.handleKeyPress}
             />
           </Form.Group>
 
