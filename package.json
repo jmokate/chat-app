@@ -3,9 +3,14 @@
 	"version": "1.0.0",
 	"description": "chat app",
 	"main": "server.js",
+	"engines": {
+		"node": "12.16.1",
+		"npm": "6.13.4"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "concurrently \"nodemon server.js\" \"npm run watch --prefix client\"",
+		"start": "node server.js",
+		"dev": "concurrently \"nodemon server.js\" \"npm run watch --prefix client\"",
 		"heroku-postbuild": "cd client && npm install && npm run build"
 	},
 	"proxy": "http://localhost:3000",
