@@ -1,7 +1,6 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-//connecting to database
 const { Client } = require("pg");
 
 const localConfig = {
@@ -163,7 +162,6 @@ putLogoutUser = async id => {
 	}
 };
 
-//create a message in the db
 createMessage = async (userId, text, createdDate) => {
 	try {
 		await client.query("BEGIN");

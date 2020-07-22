@@ -1,11 +1,11 @@
 CREATE TABLE public.messages (
-    id bigint NOT NULL,
+    id serial PRIMARY KEY,
     user_id bigint NOT NULL,
     text character varying,
     created_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 CREATE TABLE public.users (
-    id bigint NOT NULL,
+    id serial PRIMARY KEY,
     username character varying NOT NULL,
     created_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     password character varying NOT NULL,
