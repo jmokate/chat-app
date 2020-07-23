@@ -65,14 +65,15 @@ app.get("/api/users", async (req, res) => {
 
 //CREATE a user
 app.post("/api/users", async (req, res) => {
-	const newUser = req.body.userName;
+	const newUserName = req.body.userName;
 	const password = req.body.password;
 
-	const newUserId = await dataAccess.createUser(newUser, password);
+	let newUser = await dataAccess.createUser(newUserName, password);
 
-	!newUserId
+	!newUser
 		? res.status(401).json({ message: "This user already exists" })
-		: res.status(201).send({ newUserId });
+		: res.status(201).send({ newUser });
+	io.emit("user_online", JSON.stringify(newUser));
 });
 
 //LOGIN single user

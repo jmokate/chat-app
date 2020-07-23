@@ -60,13 +60,16 @@ createUser = async (username, password) => {
 	try {
 		const hash = await bcrypt.hashSync(password, saltRounds);
 		await client.query("BEGIN");
-		const results = await client.query(
+		await client.query(
 			"INSERT INTO users(username, password) VALUES($1, $2) RETURNING id",
 			[username, hash]
 		);
+		const results = await client.query(
+			`SELECT * FROM users WHERE username = '${username}';`
+		);
 
 		await client.query("COMMIT");
-		return results.rows[0].id;
+		return results.rows[0];
 	} catch (err) {
 		console.log(`User not created ${err}`);
 		await client.query("ROLLBACK");
