@@ -6,7 +6,7 @@ View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
 ![chat-app-logos-presentation](https://user-images.githubusercontent.com/29006517/88720856-28493600-d0eb-11ea-8e49-432e6dd65664.png)
 
-<div align="center">![Animated GIF-downsized_large](https://user-images.githubusercontent.com/29006517/88857074-39617800-d1bb-11ea-92d0-114159a0d5dd.gif)</div>
+<div align="center"><img src="https://user-images.githubusercontent.com/29006517/88857074-39617800-d1bb-11ea-92d0-114159a0d5dd.gif"/></div>
 
 ## Summary
 
