@@ -1,5 +1,3 @@
-# chat-app
-
 # Trash Talk (PERN stack application)
 
 A real time chat application with a humorous theme, talking trash :joy:.
