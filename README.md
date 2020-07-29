@@ -1,6 +1,6 @@
 # Trash Talk (PERN stack application)
 
-#### A real time chat app with a humorous theme, talking trash :joy:.
+### A real time chat app with a humorous theme, talking trash :joy:.
 
 View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
