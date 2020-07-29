@@ -8,6 +8,8 @@ View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
 ![Animated GIF-downsized_large](https://user-images.githubusercontent.com/29006517/88857074-39617800-d1bb-11ea-92d0-114159a0d5dd.gif)
 
+<img src="https://media.giphy.com/media/YQ5M2k6jwsYbrcfBx3/source.gif"/>
+
 ## Summary
 
 I am very happy to present Trash Talk, a safe space to talk trash :laughing:
