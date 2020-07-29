@@ -7,6 +7,7 @@ A real time chat application with a humorous theme, talking trash :joy:.
 View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
 ![chat-app-logos-presentation](https://user-images.githubusercontent.com/29006517/88720856-28493600-d0eb-11ea-8e49-432e6dd65664.png)
+[chat-app-gif](https://media.giphy.com/media/YQ5M2k6jwsYbrcfBx3/giphy.gif)
 
 ## Summary
 
@@ -27,7 +28,7 @@ Trash Talk has taken me to the next level, and no I'm not trash talking :joy:. C
 1. Clone this repository into your chosen directory.
 2. Open a new pSQL shell and create a new Postgres Database:
 
-`$ createdb chat_app`
+   `$ createdb chat_app`
 
 3. Create the necessary tables by copy and pasting the contents of the `2020-19-7.sql` file in the db-backup directory.
 4. Go to root directory of this project in your terminal.
