@@ -1,6 +1,6 @@
 # Trash Talk (PERN stack application)
 
-A real time chat application with a humorous theme, talking trash :joy:.
+#### A real time chat app with a humorous theme, talking trash :joy:.
 
 View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
@@ -10,14 +10,14 @@ View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
 ## Summary
 
-I am very happy to present Trash Talk, a safe space to talk trash :laughing:
+I am very happy to present Trash Talk, a safe space to talk trash :laughing:.
 This is my first project utilizing a Postgres database via Node-Postgres, as well as sockets using Socket.io.
 
 This was by far the most challening project for me to build, however I had a blast doing it and learned so much about how NodeJS works with Psql. While there was a learning curve, My strengthened skills with Javascript, React and the Axios library set me up for success on this one.
 
 Trash Talk has taken me to the next level, and no I'm not trash talking :joy:. Creating my first PERN stack application has brought me to my goal of becoming a full-stack developer. Although there is no finish line in this marathon, I have trained and am ready to continue with this journey.
 
-## Installations Directions
+## Installation Directions
 
 ### Requirements
 
