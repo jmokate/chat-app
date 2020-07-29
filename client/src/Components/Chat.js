@@ -27,11 +27,7 @@ class Chat extends React.Component {
 			currentUser: {},
 			usersOnline: [],
 			usersOffline: [],
-<<<<<<< HEAD
 			endpoint: "http://localhost:5000",
-=======
-			endpoint: process.env.port,
->>>>>>> 75e74d61457af1a1769589403abf606d6af308d8
 		};
 		socket = io(this.state.endpoint);
 	}
