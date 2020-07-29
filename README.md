@@ -5,7 +5,8 @@ A real time chat application with a humorous theme, talking trash :joy:.
 View it on [Heroku](https://still-coast-26529.herokuapp.com/)
 
 ![chat-app-logos-presentation](https://user-images.githubusercontent.com/29006517/88720856-28493600-d0eb-11ea-8e49-432e6dd65664.png)
-[chat-app-gif](https://media.giphy.com/media/YQ5M2k6jwsYbrcfBx3/giphy.gif)
+
+<div style="width:100%;height:0;padding-bottom:56%;position:relative;"><iframe src="https://giphy.com/embed/YQ5M2k6jwsYbrcfBx3" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/YQ5M2k6jwsYbrcfBx3">via GIPHY</a></p>
 
 ## Summary
 
