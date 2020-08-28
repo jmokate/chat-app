@@ -1,4 +1,4 @@
-const express = require("./node_modules/express");
+const express = require("express");
 const router = express.Router();
 const dataAccess = require("../data_access");
 const socketService = require("../services/socket-service");
