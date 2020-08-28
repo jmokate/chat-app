@@ -4,9 +4,10 @@ const path = require("path");
 const port = process.env.PORT || 5000;
 const dataAccess = require("./data_access");
 const http = require("http");
-const socketIo = require("socket.io");
+
+const socketService = require("./services/socket-service");
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketService.getIo(server);
 require("dotenv").config();
 
 dataAccess.connectToDb();
@@ -51,6 +52,9 @@ app.post("/api/messages", async (req, res) => {
 
 	io.emit("chat_message", JSON.stringify(returnedMessage));
 });
+
+const userRoutes = require("./routes/users-routes");
+app.use("/api/users", userRoutes);
 
 //GET all users
 app.get("/api/users", async (req, res) => {
