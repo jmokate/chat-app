@@ -1,6 +1,6 @@
 import React from "react";
-import Message from "./Message";
-import Users from "./Users";
+import MessagesBox from "./MessagesBox";
+import UsersSideBar from "./UsersSideBar";
 import {
 	Container,
 	Col,
@@ -204,54 +204,6 @@ class Chat extends React.Component {
 	};
 
 	render() {
-		const { messagesInDataBase } = this.state;
-		let currentId;
-
-		if (this.state.currentUser) {
-			currentId = this.state.currentUser.id;
-		}
-
-		const renderMessage = messagesInDataBase.map(message => {
-			return message.user_id == currentId ? (
-				<Message
-					key={message.id}
-					userName={message.username}
-					text={message.text}
-					createdDate={message.created_date}
-					className={"you"}
-				/>
-			) : (
-				<Message
-					key={message.id}
-					userName={message.username}
-					text={message.text}
-					createdDate={message.created_date}
-					className={"users-online"}
-				/>
-			);
-		});
-
-		const { usersOnline } = this.state;
-
-		const renderUsers = usersOnline.map(user => {
-			return user.id == currentId ? null : (
-				<Users
-					key={user.id}
-					userName={user.username}
-					className={"users-online"}
-				/>
-			);
-		});
-
-		const { currentUser } = this.state;
-		renderUsers.push(
-			<Users
-				key={currentId}
-				userName={currentUser.userName}
-				className={"you"}
-			/>
-		);
-
 		return (
 			<div>
 				<Container className='title'>
@@ -264,17 +216,18 @@ class Chat extends React.Component {
 				<Container className='main-outline'>
 					<Row noGutters>
 						<Col className='users-box' xs={3} md={3} align='center'>
-							<span className='labels'>Users</span>
-							<div className='usersContainer'>
-								{/* USERS IN CHAT */}
-
-								{renderUsers}
-							</div>
+							<UsersSideBar
+								usersOnline={this.state.usersOnline}
+								currentUser={this.state.currentUser}
+							/>
 						</Col>
 						<Col className='empty-col'></Col>
 						<Col className='chat-box' xs={8} md={8} align='center'>
 							<span className='labels'>Messages</span>
-							<div className='messagesContainer'>{renderMessage}</div>
+							<MessagesBox
+								messagesInDataBase={this.state.messagesInDataBase}
+								currentUser={this.state.currentUser}
+							/>
 						</Col>
 					</Row>
 					<Row noGutters>

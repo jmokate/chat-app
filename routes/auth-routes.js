@@ -4,7 +4,6 @@ const dataAccess = require("../data_access");
 const socketService = require("../services/socket-service");
 const io = socketService.getIo();
 
-//LOGIN single user
 router.post("/login", async (req, res) => {
 	const loginName = req.body.userName;
 	const password = req.body.password;
