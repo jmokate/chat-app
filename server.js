@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const port = process.env.PORT || 5000;
-const dataAccess = require("./data_access");
+const pgAccess = require("./database/pg-access");
+//const dataAccess = require("./data_access");
 const http = require("http");
 const server = http.createServer(app);
 const socketService = require("./services/socket-service");
 const io = socketService.getIo(server);
 require("dotenv").config();
 
-dataAccess.connectToDb();
+pgAccess.connectToDb();
 
 io.on("connection", socket => {
 	socket.emit("new_message", "sockets connected");

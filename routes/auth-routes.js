@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const dataAccess = require("../data_access");
+const authAccess = require("../database/authAccess");
 const socketService = require("../services/socket-service");
 const io = socketService.getIo();
 
 router.post("/login", async (req, res) => {
 	const loginName = req.body.userName;
 	const password = req.body.password;
-	let userMatch = await dataAccess.loginUser(loginName, password);
+	let userMatch = await authAccess.loginUser(loginName, password);
 
 	!userMatch.isSuccessful
 		? res.status(401).json({
@@ -24,7 +24,7 @@ router.post("/logout", async (req, res) => {
 	const id = req.body.id;
 	let logOutName = req.body.userName;
 
-	const userMatch = await dataAccess.logOutUser(logOutName);
+	const userMatch = await authAccess.logOutUser(logOutName);
 
 	!userMatch
 		? res.status(401).json({
@@ -38,7 +38,7 @@ router.post("/logout", async (req, res) => {
 router.put("/logout/:id", async (req, res) => {
 	const id = req.params.id;
 
-	await dataAccess.putLogoutUser(id);
+	await authAccess.putLogoutUser(id);
 
 	io.emit("user_disconnect", JSON.stringify(id));
 });
