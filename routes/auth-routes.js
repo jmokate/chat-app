@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const pgAccess = require("../database/pg-access");
 const authAccess = require("../database/authAccess");
 const socketService = require("../services/socket-service");
 const io = socketService.getIo();

@@ -1,28 +1,13 @@
+// const router = express.Router();
 const bcrypt = require("bcrypt");
 const pgAccess = require("./pg-access");
-const { Client } = require("pg");
+require("dotenv").config();
+require("../routes/auth-routes");
+const { client } = require("pg");
+//const { Client } = require("pg");
+
+// let client = await pgAccess.connectToDb();
 //const saltRounds = 10;
-
-// createUser = async (username, password) => {
-// 	try {
-// 		const hash = await bcrypt.hashSync(password, saltRounds);
-// 		await client.query("BEGIN");
-// 		await client.query(
-// 			"INSERT INTO users(username, password) VALUES($1, $2) RETURNING id",
-// 			[username, hash]
-// 		);
-// 		const results = await client.query(
-// 			`SELECT * FROM users WHERE username = '${username}';`
-// 		);
-
-// 		await client.query("COMMIT");
-// 		return results.rows[0];
-// 	} catch (err) {
-// 		console.log(`User not created ${err}`);
-// 		await client.query("ROLLBACK");
-// 		return false;
-// 	}
-// };
 
 loginUser = async (name, password) => {
 	try {
