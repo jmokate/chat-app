@@ -1,19 +1,20 @@
 // const router = express.Router();
 const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const pgAccess = require("./pg-access");
 require("dotenv").config();
 require("../routes/auth-routes");
-require("pg");
-//const { Client } = require("pg");
+//require("pg");
+const { pool } = require("pg");
 
 // let client = await pgAccess.connectToDb();
-//const saltRounds = 10;
+
 // const client = pgAccess.connectToDb();
 
 loginUser = async (name, password) => {
 	try {
 		await pool.query("BEGIN");
-		const results = await client.query(
+		const results = await pool.query(
 			`SELECT * FROM users WHERE username = '${name}';`
 		);
 		const saltedPassword = results.rows[0].password;
@@ -32,13 +33,13 @@ loginUser = async (name, password) => {
 				errorMessage: "Incorrect password",
 			};
 		} else {
-			await client.query(
+			await pool.query(
 				`UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
 			);
-			await client.query(
+			await pool.query(
 				`UPDATE users SET is_logged_in = true WHERE username = '${name}'`
 			);
-			await client.query("COMMIT");
+			await pool.query("COMMIT");
 		}
 		let successfulLogin = {
 			isSuccessful: true,
@@ -57,14 +58,14 @@ loginUser = async (name, password) => {
 
 logOutUser = async name => {
 	try {
-		await client.query("BEGIN");
-		const results = await client.query(
+		await pool.query("BEGIN");
+		const results = await pool.query(
 			`SELECT * FROM users WHERE username = '${name}'`
 		);
-		await client.query(
+		await pool.query(
 			`UPDATE users SET is_logged_in = false WHERE username = '${name}'`
 		);
-		await client.query("COMMIT");
+		await pool.query("COMMIT");
 		return results.rows[0];
 	} catch (err) {
 		console.log(`Could not logout user ${err}`);
@@ -74,12 +75,12 @@ logOutUser = async name => {
 
 putLogoutUser = async id => {
 	try {
-		await client.query("BEGIN");
-		await client.query(`SELECT * FROM users WHERE id = '${id}'`);
-		await client.query(
+		await pool.query("BEGIN");
+		await pool.query(`SELECT * FROM users WHERE id = '${id}'`);
+		await pool.query(
 			`UPDATE users SET is_logged_in = false WHERE id = '${id}'`
 		);
-		await client.query("COMMIT");
+		await pool.query("COMMIT");
 	} catch (err) {
 		console.log(`Could not logout user ${err}`);
 		return false;
