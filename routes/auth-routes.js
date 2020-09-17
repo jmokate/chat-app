@@ -10,13 +10,15 @@ router.post("/login", async (req, res) => {
 	const password = req.body.password;
 	let userMatch = await authAccess.loginUser(loginName, password);
 
-	!userMatch.isSuccessful
-		? res.status(401).json({
-				message: userMatch.errorMessage,
-		  })
-		: (userMatch = userMatch.user);
+	if (!userMatch.isSuccessful) {
+		res.status(401).json({
+			message: userMatch.errorMessage,
+		});
+	} else {
+		userMatch = userMatch.user;
 
-	res.status(201).send({ userMatch });
+		res.status(201).send({ userMatch });
+	}
 
 	io.emit("user_online", JSON.stringify(userMatch));
 });
@@ -27,11 +29,13 @@ router.post("/logout", async (req, res) => {
 
 	const userMatch = await authAccess.logOutUser(logOutName);
 
-	!userMatch
-		? res.status(401).json({
-				message: "there was an issue logging out",
-		  })
-		: res.status(201).send({ userMatch });
+	if (!userMatch) {
+		res.status(401).json({
+			message: "there was an issue logging out",
+		});
+	} else {
+		res.status(201).send({ userMatch });
+	}
 
 	io.emit("user_disconnect", JSON.stringify(id));
 });

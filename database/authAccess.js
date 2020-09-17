@@ -3,15 +3,16 @@ const bcrypt = require("bcrypt");
 const pgAccess = require("./pg-access");
 require("dotenv").config();
 require("../routes/auth-routes");
-const { client } = require("pg");
+require("pg");
 //const { Client } = require("pg");
 
 // let client = await pgAccess.connectToDb();
 //const saltRounds = 10;
+// const client = pgAccess.connectToDb();
 
 loginUser = async (name, password) => {
 	try {
-		await client.query("BEGIN");
+		await pool.query("BEGIN");
 		const results = await client.query(
 			`SELECT * FROM users WHERE username = '${name}';`
 		);

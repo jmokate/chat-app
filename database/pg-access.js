@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Client } = require("pg");
+const { Pool } = require("pg");
 
 const localConfig = {
 	database: process.env.PG_DATABASE,
@@ -12,7 +12,7 @@ const herokuAddonConfig = {
 	connectionString: process.env.DATABASE_URL,
 };
 
-const client = new Client(
+const pool = new Pool(
 	process.env.NODE_ENV === "production" ? herokuAddonConfig : localConfig
 );
 
@@ -20,7 +20,7 @@ connectToDb = async () => {
 	// ASYNC CONNECT TO DB
 
 	try {
-		await client.connect();
+		await pool.connect();
 		console.log("connected to chat_app database");
 	} catch (err) {
 		console.log("Not connected to DB" + err);
