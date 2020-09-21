@@ -12,12 +12,12 @@ const herokuAddonConfig = {
 	connectionString: process.env.DATABASE_URL,
 };
 
-const pool = new Pool(
-	process.env.NODE_ENV === "production" ? herokuAddonConfig : localConfig
-);
-
 connectToDb = async () => {
 	// ASYNC CONNECT TO DB
+
+	const pool = new Pool(
+		process.env.NODE_ENV === "production" ? herokuAddonConfig : localConfig
+	);
 
 	try {
 		await pool.connect();
