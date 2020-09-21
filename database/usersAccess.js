@@ -5,32 +5,32 @@ require("dotenv").config();
 require("../routes/users-routes");
 
 createUser = async (username, password) => {
-	const client = await pgAccess.connectToDb();
+	let pool = await pgAccess.connectToDb();
 	console.log("connected to create user");
 	try {
 		const hash = await bcrypt.hashSync(password, saltRounds);
-		await client.query("BEGIN");
-		await client.query(
+		await pool.query("BEGIN");
+		await pool.query(
 			"INSERT INTO users(username, password) VALUES($1, $2) RETURNING id",
 			[username, hash]
 		);
-		const results = await client.query(
+		const results = await pool.query(
 			`SELECT * FROM users WHERE username = '${username}';`
 		);
 
-		await client.query("COMMIT");
+		await pool.query("COMMIT");
 		return results.rows[0];
 	} catch (err) {
 		console.log(`User not created ${err}`);
-		await client.query("ROLLBACK");
+		await pool.query("ROLLBACK");
 		return false;
 	}
 };
 
 queryInactiveUsers = async () => {
-	const client = await pgAccess.connectToDb();
+	let pool = await pgAccess.connectToDb();
 	try {
-		const results = await client.query(
+		const results = await pool.query(
 			"SELECT * FROM users WHERE is_logged_in = false;"
 		);
 		return results.rows;
@@ -41,13 +41,13 @@ queryInactiveUsers = async () => {
 };
 
 queryActiveUsers = async () => {
-	const client = await pgAccess.connectToDb();
+	let pool = await pgAccess.connectToDb();
 	try {
-		await client.query("SELECT * FROM users WHERE is_logged_in = true;");
-		await client.query(
+		await pool.query("SELECT * FROM users WHERE is_logged_in = true;");
+		await pool.query(
 			"UPDATE users SET is_logged_in = false WHERE last_active_at < NOW() - INTERVAL '20 minutes';"
 		);
-		const results = await client.query(
+		const results = await pool.query(
 			"SELECT * FROM users WHERE last_active_at > NOW() - INTERVAL '20 minutes' AND is_logged_in = true;"
 		);
 		return results.rows;
