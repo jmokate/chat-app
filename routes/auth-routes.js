@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const pgAccess = require("../database/pg-access");
 const authAccess = require("../database/authAccess");
 const socketService = require("../services/socket-service");
 const io = socketService.getIo();
@@ -14,7 +13,7 @@ router.post("/login", async (req, res) => {
 		res.status(401).json({
 			message: userMatch.errorMessage,
 		});
-	} else {
+	} else if (userMatch.isSuccessful) {
 		userMatch = userMatch.user;
 
 		res.status(201).send({ userMatch });

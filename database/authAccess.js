@@ -4,18 +4,12 @@ const saltRounds = 10;
 const pgAccess = require("./pg-access");
 require("dotenv").config();
 require("../routes/auth-routes");
-require("pg");
-const { Pool } = require("pg");
-const pool = new Pool();
-
-// const client = pgAccess.connectToDb();
 
 loginUser = async (name, password) => {
-	const client = await pgAccess.connectToDb();
-	console.log("connected");
+	let pool = await pgAccess.connectToDb();
 	try {
-		await client.query("BEGIN");
-		const results = await client.query(
+		await pool.query("BEGIN");
+		const results = await pool.query(
 			`SELECT * FROM users WHERE username = '${name}';`
 		);
 		const saltedPassword = results.rows[0].password;
@@ -26,10 +20,6 @@ loginUser = async (name, password) => {
 				isSuccessful: false,
 				errorMessage: "This user is already logged in",
 			};
-		} else if (results.rows[0].is_logged_in == false) {
-			return {
-				isSuccessful: true,
-			};
 		}
 
 		if (!passwordMatch) {
@@ -38,13 +28,13 @@ loginUser = async (name, password) => {
 				errorMessage: "Incorrect password",
 			};
 		} else {
-			await client.query(
+			await pool.query(
 				`UPDATE users SET last_active_at = NOW() WHERE username = '${name}'`
 			);
-			await client.query(
+			await pool.query(
 				`UPDATE users SET is_logged_in = true WHERE username = '${name}'`
 			);
-			await client.query("COMMIT");
+			await pool.query("COMMIT");
 		}
 		let successfulLogin = {
 			isSuccessful: true,
@@ -62,6 +52,7 @@ loginUser = async (name, password) => {
 };
 
 logOutUser = async name => {
+	let pool = await pgAccess.connectToDb();
 	try {
 		await pool.query("BEGIN");
 		const results = await pool.query(
@@ -79,6 +70,7 @@ logOutUser = async name => {
 };
 
 putLogoutUser = async id => {
+	let pool = await pgAccess.connectToDb();
 	try {
 		await pool.query("BEGIN");
 		await pool.query(`SELECT * FROM users WHERE id = '${id}'`);

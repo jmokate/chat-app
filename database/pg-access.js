@@ -22,6 +22,7 @@ connectToDb = async () => {
 	try {
 		await pool.connect();
 		console.log("connected to chat_app database");
+		return pool;
 	} catch (err) {
 		console.log("Not connected to DB" + err);
 	}
