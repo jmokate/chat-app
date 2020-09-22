@@ -1,8 +1,6 @@
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const pgAccess = require("./pg-access");
-require("dotenv").config();
-require("../routes/users-routes");
 
 createUser = async (username, password) => {
 	let pool = await pgAccess.connectToDb();

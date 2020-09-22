@@ -4,7 +4,7 @@ queryAllMessages = async () => {
 	let pool = await pgAccess.connectToDb();
 	try {
 		const results = await pool.query(
-			"SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id;"
+			"SELECT m.user_id, m.id, m.text, m.created_date, u.username FROM messages AS m INNER JOIN users AS u ON u.id = m.user_id ORDER BY m.id;"
 		);
 		return results.rows;
 	} catch (err) {
