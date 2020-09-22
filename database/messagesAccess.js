@@ -14,6 +14,7 @@ queryAllMessages = async () => {
 };
 
 createMessage = async (userId, text, createdDate) => {
+	let pool = await pgAccess.connectToDb();
 	try {
 		await pool.query("BEGIN");
 		const result = await pool.query(

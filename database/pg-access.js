@@ -18,13 +18,16 @@ connectToDb = async () => {
 	const pool = new Pool(
 		process.env.NODE_ENV === "production" ? herokuAddonConfig : localConfig
 	);
-
-	try {
-		await pool.connect();
-		console.log("connected to chat_app database");
+	if (pool) {
 		return pool;
-	} catch (err) {
-		console.log("Not connected to DB" + err);
+	} else {
+		try {
+			await pool.connect();
+			console.log("connected to chat_app database");
+			return pool;
+		} catch (err) {
+			console.log("Not connected to DB" + err);
+		}
 	}
 };
 
