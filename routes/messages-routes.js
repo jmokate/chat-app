@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
 		username: req.body.username,
 		text: req.body.text,
 	};
+	console.log(newMessage)
 
 	const newMessageUserId = req.body.id;
 	const newMessageText = req.body.text;
@@ -29,6 +30,7 @@ router.post("/", async (req, res) => {
 	returnedMessage.username = newMessage.username;
 
 	io.emit("chat_message", JSON.stringify(returnedMessage));
+	console.log(returnedMessage)
 });
 
 module.exports = router;
