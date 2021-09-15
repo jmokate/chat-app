@@ -3,7 +3,6 @@ const app = express();
 const path = require("path");
 const port = process.env.PORT || 5000;
 const pgAccess = require("./database/pg-access");
-//const dataAccess = require("./data_access");
 const http = require("http");
 const server = http.createServer(app);
 const socketService = require("./services/socket-service");
