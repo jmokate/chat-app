@@ -4,8 +4,8 @@
 	"description": "chat app",
 	"main": "server.js",
 	"engines": {
-		"node": "12.16.1",
-		"npm": "6.13.4"
+		"node": "16.5.0",
+		"npm": "7.19.1"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",

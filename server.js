@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const pgAccess = require("./database/pg-access");
 const http = require("http");
 const server = http.createServer(app);
@@ -40,4 +40,4 @@ app.get("/*", async (req, res) => {
 	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
-server.listen(port, () => console.log(`app with sockets listening at ${port}`));
+server.listen(PORT, () => console.log(`app with sockets listening at ${PORT}`));

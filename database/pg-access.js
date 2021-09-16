@@ -6,6 +6,7 @@ const localConfig = {
 	user: process.env.PG_USER,
 	port: process.env.PG_PORT,
 	password: process.env.PG_PASSWORD,
+	host: process.env.PG_HOST,
 };
 
 const herokuAddonConfig = {

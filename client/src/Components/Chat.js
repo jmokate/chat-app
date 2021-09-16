@@ -48,7 +48,7 @@ class Chat extends React.Component {
 		this.getAllMessages();
 
 		// socket CONNECTION listener
-		socket.on("chat_message", msg => {
+		socket.on("new_message", msg => {
 			console.log("connection to socket message: " + msg);
 		});
 
