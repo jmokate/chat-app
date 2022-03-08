@@ -2,7 +2,7 @@
 
 ### A real time chat app with a humorous theme, talking trash :joy:.
 
-View it on [Heroku](https://still-coast-26529.herokuapp.com/)
+View it on [Heroku](https://immense-cove-49212.herokuapp.com/)
 
 <div align="center"><img src="https://user-images.githubusercontent.com/29006517/88857074-39617800-d1bb-11ea-92d0-114159a0d5dd.gif" height="480px" width="852px"/></div>
 
